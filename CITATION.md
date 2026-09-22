@@ -19,7 +19,7 @@ updates made on the main branch.
 ```bibtex
 @software{opoku_nondiagonal_pyept,
   author = {Opoku, Ernest},
-  title = {Nondiagonal PyEPT},
+  title = {Nondiagonal PyEPT: Reference Implementation of Non-diagonal Electron Propagator Methods},
   version = {0.1.0},
   url = {https://github.com/ernopoku/Nondiagonal-PyEPT}
 }
