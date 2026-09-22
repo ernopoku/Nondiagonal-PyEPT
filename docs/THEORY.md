@@ -187,3 +187,7 @@ Z=[1-u^T\Sigma'(\omega)u]^{-1}.
 The implementation verifies the AO overlap norm and tests the derivative against finite differences. For the full finite spectrum, `sum_n Z_n` equals the number of simple operators in the selected spin sector. This sum rule does not imply that each approximate pole is experimentally accurate.
 
 The production convergence condition is `||H C − ω C||₂ < tol`. A small change in successive Ritz energies alone is insufficient, as demonstrated by the archived water and nitrogen calculations in the validation report.
+
+## Static opposite-sector extension
+
+The project-defined `nD-NRL3` approximation freezes and symmetrizes the opposite-sector NRL3 resolvent. Its complete definition and residue convention are in [NON_DYSON_NRL3.md](NON_DYSON_NRL3.md).

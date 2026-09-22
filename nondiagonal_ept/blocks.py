@@ -60,6 +60,8 @@ class Hamiltonian:
     def __init__(self,ints,method='NRL3',sector='ip',spin=0,*,doubles=None):
         if spin not in (0,1):raise ValueError('spin must be 0 (alpha) or 1 (beta).')
         self.ints=ints;self.spec=method_spec(method,sector);self.sector=sector;self.spin=spin
+        if self.spec.name == 'nD-NRL3':
+            raise ValueError('Use EPT or StaticNRL3 to construct nD-NRL3.')
         o,v,n=ints.nocc,ints.nvir,ints.n
         self.simple=np.flatnonzero(ints.spin==spin)
         # Spin values +1 alpha, -1 beta. Operator spin change must match creator.

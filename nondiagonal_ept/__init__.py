@@ -12,6 +12,10 @@ class EPT:
             from .brueckner import prepare
             self.integrals,t,self.brueckner=prepare(mf,frozen,max_memory_mb,brueckner_tol)
             self.hamiltonian=Hamiltonian(self.integrals,method,sector,spin,doubles=t)
+        elif spec.name == 'nD-NRL3':
+            from .non_dyson import StaticNRL3
+            self.integrals=from_pyscf(mf,frozen,max_memory_mb)
+            self.hamiltonian=StaticNRL3(self.integrals,sector,spin)
         else:
             self.integrals=from_pyscf(mf,frozen,max_memory_mb)
             self.hamiltonian=Hamiltonian(self.integrals,method,sector,spin)
@@ -22,7 +26,7 @@ class EPT:
         """Primary poles for zero-based ORIGINAL spatial MO indices.
 
         Default: active occupied orbitals for IP, active virtual orbitals for EA.
-        Both triple manifolds are present in either case.
+        nD-NRL3 retains only the sector-specific triple manifold dynamically.
         """
         h=self.hamiltonian
         original=self.integrals.original_mos[self.integrals.spatial[h.simple]]

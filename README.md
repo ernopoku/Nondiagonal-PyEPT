@@ -18,13 +18,14 @@ The core uses a **matrix-free Hermitian Hamiltonian**, explicit antisymmetric sp
 | `NR2` | Non-diagonal renormalized second order |
 | `NRP3` | Non-diagonal renormalized partial third order |
 | `NRQ3` | Non-diagonal renormalized quasiparticle third order |
+| `nD-NRL3` | Static opposite-sector extension of NRL3; [definition and validation](docs/NON_DYSON_NRL3.md) |
 | `NRL3` | Non-diagonal renormalized linear third order |
 | `3+`| Strict third-order Dyson ADC with ring/ladder renormalization |
 | `BD-T1` | Brueckner-doubles reference with terms linear in doubles and triple operators |
 
 `sector="ea"` applies the particle–hole counterpart of the asymmetric NR2/NRP3/NRQ3 truncations. ND2, 2ph-TDA, NRL3, 3+, and BD-T1 have the same Hamiltonian for IP and EA. Merely changing the sign of an IP does not implement an EA-specific NRQ3 calculation.
 
-**Reference scope:** real, molecular, closed-shell RHF; BD-T1 automatically constructs a semicanonical Brueckner reference with PySCF BCCD. UHF, ROHF, DFT, density-fitted SCF references, complex/spinor orbitals, periodic systems, gradients, and non-Dyson ADC are not implemented. The generic name `ADC(3)` is deliberately rejected: use `ADC(3)-strict`. Fourth-order/renormalized-static ADC(3) variants and the articles' diagonal-only methods are outside this implementation.
+**Reference scope:** real, molecular, closed-shell RHF; BD-T1 automatically constructs a semicanonical Brueckner reference with PySCF BCCD. UHF, ROHF, DFT, density-fitted SCF references, complex/spinor orbitals, periodic systems, gradients, and non-Dyson ADC are not implemented. The static `nD-NRL3` extension is supported; it is distinct from non-Dyson ADC. The generic name `ADC(3)` is deliberately rejected: use `ADC(3)-strict`. Fourth-order/renormalized-static ADC(3) variants and the articles' diagonal-only methods are outside this implementation.
 
 ## Install and run
 
@@ -147,3 +148,7 @@ and pull-request guidance. Report problems through
 [GitHub Issues](https://github.com/ernopoku/Nondiagonal-PyEPT/issues).
 
 Printed examples label pole strength as **PS**. The Python attribute `pole.strength` and machine-readable JSON fields retain their existing names for compatibility.
+
+## Static non-Dyson NRL3
+
+Use `EPT(mf, "nD-NRL3", frozen=1, sector="ip")` or include `"nD-NRL3"` in `run_methods`. For IP, 2ph contributions are frozen at HF orbital energies and symmetrized; for EA, 2hp contributions are frozen instead. See [equations, PS interpretation, examples, and validation limits](docs/NON_DYSON_NRL3.md).

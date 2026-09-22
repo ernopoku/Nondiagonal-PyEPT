@@ -14,6 +14,7 @@ class Method:
     triple_correction: bool = False
 
 METHODS = {
+    'ND-NRL3': Method('nD-NRL3','linear',.5,.5,.5,.5,True,True),
     'BD-T1': Method('BD-T1','none',.5,.5,.5,.5,True,True,True),
     'ND2': Method('ND2'),
     '2PH-TDA': Method('2ph-TDA',ip_interaction=True,ea_interaction=True),

@@ -87,3 +87,7 @@ python -m nondiagonal_ept examples/hf.json -o hf_results.json
 ```
 
 Some BLAS builds run small tensor contractions faster with one thread. The recorded benchmark used `OPENBLAS_NUM_THREADS=1` and `VECLIB_MAXIMUM_THREADS=1`; scientific results must not depend on those settings beyond rounding.
+
+## Static nD-NRL3 extension
+
+See [the dedicated validation and definition](NON_DYSON_NRL3.md) and [ten IP/EA comparisons](non_dyson_comparison.json). This extension has independent dense-resolvent and weak-coupling checks but no external nD-NRL3 benchmark implementation. The full suite now passes 55 tests.
