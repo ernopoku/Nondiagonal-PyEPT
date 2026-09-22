@@ -1,5 +1,7 @@
 # Nondiagonal PyEPT
 
+[License: MIT](LICENSE) · [Citation](CITATION.md) · [Contributing](CONTRIBUTING.md)
+
 Non-diagonal electron propagator calculations in Python, using NumPy, SciPy, and PySCF. The implemented approximations follow the Opoku–Pawłowski–Ortiz articles cited below.
 
 The core uses a **matrix-free Hermitian Hamiltonian**, explicit antisymmetric spin-orbital tensors, PySCF integrals, and residual-controlled Davidson iterations. Both 2h1p and 2p1h manifolds are retained. This is a research implementation with the validation scope described below.
@@ -130,3 +132,22 @@ for each method. All EPT options and solver settings are shared. Duplicate
 methods (including aliases) are rejected; convergence failures raise an exception.
 The existing single-method `EPT` interface remains available.
 
+
+## License
+
+Nondiagonal PyEPT is distributed under the [MIT license](LICENSE).
+Copyright (c) 2026 Ernest Opoku. Dependencies retain their own licenses.
+
+## Citation
+
+Please cite the software and the relevant scientific method papers when using
+this work in research. See [citation guidance and BibTeX](CITATION.md), or use
+GitHub's **Cite this repository** control, powered by [CITATION.cff](CITATION.cff).
+Record the exact Git commit and computational settings for reproducibility.
+
+## Contributions
+
+Bug reports, method improvements, tests, examples, and documentation contributions
+are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) for setup, numerical validation,
+and pull-request guidance. Report problems through
+[GitHub Issues](https://github.com/ernopoku/Nondiagonal-PyEPT/issues).

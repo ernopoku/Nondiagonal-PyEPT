@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "Please cite this software and the relevant scientific method papers listed in CITATION.md. Record the commit used for reproducibility."
+type: software
+title: "Nondiagonal PyEPT"
+authors:
+  - family-names: "Opoku"
+    given-names: "Ernest"
+version: "0.1.0"
+license: MIT
+repository-code: "https://github.com/ernopoku/Nondiagonal-PyEPT"
+url: "https://github.com/ernopoku/Nondiagonal-PyEPT"
+abstract: "Non-diagonal electron propagator methods in Python with a PySCF interface."
+keywords:
+  - electron propagator
+  - quantum chemistry
+  - PySCF
+  - ionization energies
+  - electron affinities
