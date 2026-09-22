@@ -20,7 +20,7 @@ The core uses a **matrix-free Hermitian Hamiltonian**, explicit antisymmetric sp
 | `NRQ3` | Non-diagonal renormalized quasiparticle third order |
 | `nD-NRL3` | Static opposite-sector extension of NRL3; [definition and validation](docs/NON_DYSON_NRL3.md) |
 | `NRL3` | Non-diagonal renormalized linear third order |
-| `3+`| Strict third-order Dyson ADC with ring/ladder renormalization |
+| `3+`| Third-order plus |
 | `BD-T1` | Brueckner-doubles reference with terms linear in doubles and triple operators |
 
 `sector="ea"` applies the particle–hole counterpart of the asymmetric NR2/NRP3/NRQ3 truncations. ND2, 2ph-TDA, NRL3, 3+, and BD-T1 have the same Hamiltonian for IP and EA. Merely changing the sign of an IP does not implement an EA-specific NRQ3 calculation.
