@@ -1,4 +1,4 @@
-# Nondiagonal PyEPT
+# Nondiagonal PyEPT: Reference Implementation of Non-diagonal Electron Propagator Methods
 
 [License: MIT](LICENSE) · [Citation](CITATION.md) · [Contributing](CONTRIBUTING.md)
 
