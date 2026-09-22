@@ -14,7 +14,7 @@ The core uses a **matrix-free Hermitian Hamiltonian**, explicit antisymmetric sp
 | Name | Meaning |
 |---|---|
 | `ND2` / `ADC(2)` | Non-diagonal second-order Dyson self-energy |
-| `2ph-TDA` | First-order interactions in both triple manifolds |
+| `2ph-TDA` | Two-particle-one-hole Tamm–Dancoff approximation |
 | `NR2` | Non-diagonal renormalized second order |
 | `NRP3` | Non-diagonal renormalized partial third order |
 | `NRQ3` | Non-diagonal renormalized quasiparticle third order |
