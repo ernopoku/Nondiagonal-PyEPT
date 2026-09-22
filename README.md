@@ -79,16 +79,6 @@ For BD-T1, use `EPT(mf, "BD-T1", frozen=1)`. This runs CCSD and orbital iteratio
 - A Dyson orbital is **not** unit-normalized by default. Its squared norm is its pole strength. `normalized_dyson_mo` provides the unit-normalized shape.
 - The program uses spatial four-index ERIs and spin-block contractions, avoiding a full spin-orbital V⁴ tensor. It does not use density fitting or distributed/out-of-core propagator tensors. `max_memory_mb` is a conservative preflight estimate, not an operating-system memory limit. Very large basis sets remain expensive.
 
-## Validation and a legacy convergence defect
-
-See [the validation report](docs/VALIDATION.md), [equations](docs/THEORY.md), and the [project Wiki](https://github.com/ernopoku/Nondiagonal-PyEPT/wiki).
-
-Independent tests evaluate fermionic operators in determinant spaces, compare MP2 amplitudes with PySCF, check the third-order limit against full CI, compare Davidson with dense diagonalization, and verify spectral sum rules, spin symmetry, MO-phase invariance, Dyson normalization, and analytic self-energy derivatives.
-
-The archived reference results are valuable references but are **not all converged eigenpairs**. In particular, their water NRL3 calculation stops after three iterations because the energy change is small although the eigenvector residual is large. Reproducing those iterations recovers the archived energy and pole strength; continuing them changes the result. The rewrite fixes this by requiring a small residual. The report distinguishes this intentional numerical correction from agreement with the archived output.
-
-BD-T1 is implemented and algebraically tested, with small-molecule execution tests. No independent BD-T1 molecular benchmark was supplied, so its quantitative validation is less extensive than NRP3/NRQ3/NRL3. No claim is made to reproduce the complete articles' statistical benchmark datasets.
-
 ## References
 
 - E. Opoku, F. Pawłowski, J. V. Ortiz, *J. Chem. Phys.* **159**, 124109 (2023), [doi:10.1063/5.0168779](https://doi.org/10.1063/5.0168779), especially Eqs. 18–24, 28–33 and Table IV.
