@@ -115,11 +115,13 @@ Each vertex cell gives the multiplier of C added to B. D entries give the highes
 | NRQ3 | Linear singles | 1/2 | 1/2 | 0 | 0 | 1 | 0 |
 | NRL3 | Linear singles | 1/2 | 1/2 | 1/2 | 1/2 | 1 | 1 |
 | 3+ | Singles + quadratic doubles | 1 | 1 | 1 | 1 | 1 | 1 |
-| BD-T1 | Brueckner Fock matrix | 1 | 1 | 1 | 1 | Linear in BD doubles | Linear in BD doubles |
+| BD-T1 | Brueckner Fock matrix | 1/2 | 1/2 | 1/2 | 1/2 | Linear in BD doubles | Linear in BD doubles |
 
 For NR2/NRP3/NRQ3 attachment calculations, interchange holes and particles in this table. The supplied `rp3ea_tz.com` and `rq3ea_tz.com` use exactly that switch.
 
 ## BD-T1 triple corrections
+
+The simple–triple vertices are `B + C/2`, with C as defined above. The triple-block corrections below are unchanged. Frozen orbitals remain fixed at the input RHF coefficients during optimization and semicanonicalization.
 
 In this section t denotes the **converged Brueckner doubles**, not MP2 t. Define
 
@@ -155,7 +157,7 @@ The added triple actions are
 -\tfrac12\sum_jy_{jab}r_{ij}.
 \]
 
-X_abcd is factorized through occupied pairs, not stored. Tests compare the formulas against the Hermitized linear-in-doubles contribution to the super-operator metric in small determinant spaces. Independent published BD-T1 molecular benchmark validation remains outstanding.
+X_abcd is factorized through occupied pairs, not stored. Tests compare the formulas against the Hermitized linear-in-doubles contribution to the super-operator metric in small determinant spaces. A supplied N2/cc-pVDZ molecular reference is checked in the regression suite; see BD_T1_VALIDATION.md.
 
 ## Poles, self-energy, and intensity
 

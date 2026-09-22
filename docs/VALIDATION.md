@@ -66,9 +66,9 @@ python examples/diagnose_convergence.py --molecule CO --method NRQ3 --target 5
 
 ## BD-T1 validation boundary
 
-BD-T1 uses converged PySCF Brueckner doubles, full-weight linear vertex corrections, the off-diagonal Brueckner Fock block, and the linear doubles triple-block corrections. Its tensor equations are checked against determinant operator algebra. H2/6-31G and frozen-core H2O/STO-3G execute successfully; the latter's values and Brueckner singles norm are in `bdt1_smoke.json`.
+BD-T1 uses converged PySCF Brueckner doubles, half-weight linear vertex corrections, the off-diagonal Brueckner Fock block, and the linear doubles triple-block corrections. Its tensor equations are checked against determinant operator algebra. H2/6-31G and frozen-core H2O/STO-3G execute successfully; the latter's values and Brueckner singles norm are in `bdt1_smoke.json`.
 
-No BD-T1 reference sample was present in the archive, so these are algebraic and execution tests, not an independent end-to-end reproduction of published BD-T1 molecular values. That benchmark remains an explicit limitation. Similarly, ND2, 2ph-TDA, NR2, and strict 3+ are validated by independent algebra and molecular numerical checks, rather than method-specific reference logs supplied here.
+The supplied N2/cc-pVDZ fixed-core reference now provides a molecular regression for three BD-T1 IP poles. See [BD-T1 validation](BD_T1_VALIDATION.md) for the correction, comparisons, and precision limits. ND2, 2ph-TDA, NR2, and strict 3+ retain their independent algebra and molecular checks.
 
 ## Remaining scope limits
 

@@ -69,7 +69,7 @@ print(root.energy, root.binding_energy_ev)
 
 `energy` is the signed propagator pole ω in hartree. For removal ω = E(N) − E(N−1), so IP = −ω. For addition ω = E(N+1) − E(N), so EA = −ω. Consequently, an unbound attachment has positive ω and negative EA. The program does not classify states using the sign of ω alone.
 
-For BD-T1, use `EPT(mf, "BD-T1", frozen=1)`. This runs CCSD and orbital iterations, verifies the Brueckner singles norm, then builds the propagator. Target MO indices label the resulting semicanonical Brueckner orbitals; their character/order need not match the original canonical RHF orbitals. The supplied RHF object is preserved.
+For BD-T1, use `EPT(mf, "BD-T1", frozen=1)`. This runs CCSD and orbital iterations, verifies the Brueckner singles norm, then builds the propagator. Target MO indices label the resulting semicanonical Brueckner orbitals; their character/order need not match the original canonical RHF orbitals. The supplied RHF object is preserved. Frozen core orbitals stay fixed at their input RHF coefficients throughout orbital optimization. For N2 use `frozen=2`; see `examples/n2_bdt1.py`.
 
 ## Solvers and observables
 

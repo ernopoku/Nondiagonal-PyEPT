@@ -13,6 +13,8 @@ def prepare(mf,frozen,max_memory_mb,tol):
     copied.mo_coeff=mf.mo_coeff.copy();copied.mo_energy=mf.mo_energy.copy()
     bd=cc.CCSD(copied,frozen=frozen)
     bd.conv_tol=min(1e-11,tol*.01);bd.conv_tol_normt=min(1e-9,tol*.1)
+    frozen_mask=bd.get_frozen_mask()
+    frozen_coeff=copied.mo_coeff[:,~frozen_mask].copy()
     bd.kernel()
     if not bd.converged:raise ConvergenceError('Initial CCSD did not converge for BCCD.')
     bd=bccd_kernel_(bd,conv_tol_normu=tol,max_cycle=50,canonicalization=True,verbose=0)
@@ -22,6 +24,9 @@ def prepare(mf,frozen,max_memory_mb,tol):
     bd.kernel(t1=bd.t1,t2=bd.t2)
     if not bd.converged or np.linalg.norm(bd.t1)>max(tol*3,1e-8):
         raise ConvergenceError(f'Brueckner reference failed convergence; |t1|={np.linalg.norm(bd.t1):.3e}.')
+    # Fixed-core convention: excluded orbitals must remain the input RHF MOs.
+    if not np.array_equal(bd.mo_coeff[:,~frozen_mask], frozen_coeff):
+        raise ConvergenceError('Brueckner optimization changed frozen orbitals.')
     ref=bd._scf;ref.mo_coeff=bd.mo_coeff
     density=ref.make_rdm1();fock=ref.get_fock(dm=density)
     ref.mo_energy=np.diag(ref.mo_coeff.T@fock@ref.mo_coeff).copy()

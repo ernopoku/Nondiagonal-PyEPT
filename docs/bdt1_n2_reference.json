@@ -1,0 +1,39 @@
+{
+  "molecule": "N2",
+  "bond_angstrom": 1.1136,
+  "basis": "cc-pvdz",
+  "frozen": 2,
+  "core_convention": "fixed input RHF orbitals",
+  "bd_energy_hartree": -109.26313967128972,
+  "singles_norm": 5.942717548521653e-09,
+  "core_coefficient_max_change": 0.0,
+  "poles": [
+    {
+      "original_mo": 6,
+      "energy": -0.6139491792138958,
+      "reference_energy": -0.6139503411,
+      "difference_hartree": 1.1618861042173023e-06,
+      "strength": 0.929389002588829,
+      "reference_strength": 0.9292954916,
+      "residual": 3.403601532570021e-10
+    },
+    {
+      "original_mo": 4,
+      "energy": -0.5491134587380655,
+      "reference_energy": -0.5491151633,
+      "difference_hartree": 1.7045619344902008e-06,
+      "strength": 0.9058775835047964,
+      "reference_strength": 0.9059496833,
+      "residual": 4.3954297334882676e-10
+    },
+    {
+      "original_mo": 3,
+      "energy": -0.6742771185411462,
+      "reference_energy": -0.6742780381,
+      "difference_hartree": 9.195588537291854e-07,
+      "strength": 0.8544686962714375,
+      "reference_strength": 0.8545204419,
+      "residual": 5.802592888237013e-10
+    }
+  ]
+}

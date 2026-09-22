@@ -20,7 +20,7 @@ python examples/diagnose_convergence.py --molecule H2O --method NRL3 --target 3
 
 ## Limits
 
-BD-T1 has algebraic and small-molecule execution tests, but lacks an independent end-to-end molecular benchmark. The articles' full statistical datasets have not been reproduced. The 2021 erratum full text was unavailable during implementation.
+BD-T1 now has an N2/cc-pVDZ fixed-core molecular regression for three IP poles, agreeing within 1.8 microhartree. See [BD-T1 validation](https://github.com/ernopoku/Nondiagonal-PyEPT/blob/main/docs/BD_T1_VALIDATION.md). The articles' full statistical datasets have not been reproduced. The 2021 erratum full text was unavailable during implementation.
 
 Only real molecular closed-shell RHF references are supported; BD-T1 prepares its own Brueckner reference. UHF/ROHF, DFT, density-fitted references, periodic systems, complex orbitals, gradients, non-Dyson ADC, diagonal-only methods, and renormalized-static ADC(3) variants are outside scope. Large-molecule and distributed performance has not been characterized.
 

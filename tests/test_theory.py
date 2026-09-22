@@ -111,3 +111,26 @@ def test_strict_adc3_matches_fci_through_third_order(ints):
     # Halving the fluctuation potential reduces the leading O(lambda^4)
     # error by approximately 16. This checks scientific order, not code shape.
     assert 12 < errors[0]/errors[1] < 20
+
+
+def test_bdt1_vertices_against_half_weight_operator_expansion(ints):
+    # Evaluate the metric in determinant space, independently of tensor vertices.
+    from dataclasses import replace
+    ints = replace(ints, fock=np.diag(ints.energy))
+    t, _ = amplitudes(ints)
+    ham = Hamiltonian(ints, 'BD-T1', doubles=t)
+    h = physical_hamiltonian(ints)
+    ref, corr = reference_states(ints, t)
+    o = ints.nocc
+    simple = [operator_matrix(ints.n, ((p, 1),)) for p in ham.simple]
+    triples = [operator_matrix(ints.n, ((i,1),(j,1),(o+a,0))) for i,j,a in ham.ip]
+    triples += [operator_matrix(ints.n, ((o+a,1),(o+b,1),(i,0))) for i,a,b in ham.ea]
+    expected = np.empty((len(simple), len(triples)))
+    for i, x in enumerate(simple):
+        for j, y in enumerate(triples):
+            comm = x.T@h-h@x.T
+            op = comm@y+y@comm
+            zeroth = ref@op@ref
+            linear = ref@op@corr+corr@op@ref
+            expected[i,j] = zeroth + .5*linear
+    np.testing.assert_allclose(np.hstack([ham.bh,ham.bp]), expected, atol=1e-13)

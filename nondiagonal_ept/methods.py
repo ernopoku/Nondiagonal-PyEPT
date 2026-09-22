@@ -14,7 +14,7 @@ class Method:
     triple_correction: bool = False
 
 METHODS = {
-    'BD-T1': Method('BD-T1','none',1.,1.,1.,1.,True,True,True),
+    'BD-T1': Method('BD-T1','none',.5,.5,.5,.5,True,True,True),
     'ND2': Method('ND2'),
     '2PH-TDA': Method('2ph-TDA',ip_interaction=True,ea_interaction=True),
     'NR2': Method('NR2',ip_vertex_h=.5,ip_interaction=True),

@@ -85,3 +85,21 @@ def test_multiple_methods_match_individual(mf):
     with pytest.raises(TypeError): run_methods(mf, 'NRL3')
     with pytest.raises(ConvergenceError):
         run_methods(mf, ['NRL3'], frozen=1, targets=[4], max_cycle=1)
+
+
+def test_bdt1_n2_fixed_core_reference():
+    # Independent supplied N2/cc-pVDZ reference; 2 fixed RHF core orbitals.
+    mf = scf.RHF(gto.M(atom='N 0 0 0; N 0 0 1.1136', unit='Angstrom',
+                       basis='cc-pvdz', verbose=0)).run(conv_tol=1e-12)
+    original = mf.mo_coeff.copy()
+    ep = EPT(mf, 'BD-T1', frozen=2)
+    np.testing.assert_array_equal(mf.mo_coeff, original)
+    np.testing.assert_array_equal(ep.brueckner.mo_coeff[:,:2], original[:,:2])
+    assert abs(ep.brueckner.e_tot - (-109.26313989349)) < 5e-7
+    poles = ep.kernel([6,4,3])
+    # Reference orbitals/solver stopped at looser tolerances; avoid bitwise claims.
+    np.testing.assert_allclose([p.energy for p in poles],
+        [-.6139503411,-.5491151633,-.6742780381], atol=3e-6, rtol=0)
+    np.testing.assert_allclose([p.strength for p in poles],
+        [.9292954916,.9059496833,.8545204419], atol=2e-4, rtol=0)
+    assert all(p.residual < 1e-9 for p in poles)
