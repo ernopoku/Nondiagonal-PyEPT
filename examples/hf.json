@@ -1,0 +1,9 @@
+{
+  "atom": "H 0 0 0; F 0 0 0.9178",
+  "basis": "cc-pvtz",
+  "method": "NRL3",
+  "frozen": 1,
+  "sector": "ip",
+  "targets": [4, 2],
+  "tol": 1e-9
+}

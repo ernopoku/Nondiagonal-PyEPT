@@ -1,0 +1,54 @@
+"""Non-diagonal electron propagators using a PySCF RHF reference."""
+from .integrals import from_pyscf
+from .blocks import Hamiltonian
+from .methods import METHODS,method_spec
+from .solver import davidson,make_pole,self_energy,ConvergenceError,HARTREE_TO_EV
+import numpy as np
+
+class EPT:
+    def __init__(self,mf,method='NRL3',*,frozen=0,sector='ip',spin=0,max_memory_mb=2000,brueckner_tol=1e-8):
+        spec=method_spec(method,sector)
+        if spec.name.upper()=='BD-T1':
+            from .brueckner import prepare
+            self.integrals,t,self.brueckner=prepare(mf,frozen,max_memory_mb,brueckner_tol)
+            self.hamiltonian=Hamiltonian(self.integrals,method,sector,spin,doubles=t)
+        else:
+            self.integrals=from_pyscf(mf,frozen,max_memory_mb)
+            self.hamiltonian=Hamiltonian(self.integrals,method,sector,spin)
+        self.method=self.hamiltonian.spec.name
+        self.results=[]
+
+    def kernel(self,targets=None,*,tol=1e-9,max_cycle=150,max_space=40):
+        """Primary poles for zero-based ORIGINAL spatial MO indices.
+
+        Default: active occupied orbitals for IP, active virtual orbitals for EA.
+        Both triple manifolds are present in either case.
+        """
+        h=self.hamiltonian
+        original=self.integrals.original_mos[self.integrals.spatial[h.simple]]
+        if targets is None:
+            choose=h.simple<self.integrals.nocc
+            if h.sector=='ea':choose=~choose
+            targets=original[choose]
+        results=[]
+        for target in targets:
+            found=np.flatnonzero(original==target)
+            if not len(found):raise ValueError(f'MO {target} is frozen or invalid.')
+            omega,x,res,it=davidson(h,int(found[0]),tol,max_cycle,max_space)
+            if any(abs(p.vector@x)>1-1e-7 for p in results):
+                raise ConvergenceError('Two targets converged to the same pole; use dense_spectrum to resolve strongly mixed states.')
+            results.append(make_pole(h,omega,x,res,it,int(target)))
+        self.results=results
+        return results
+
+    def dense_spectrum(self,max_dimension=2500):
+        """All poles, including satellites; intended for small-system verification."""
+        h=self.hamiltonian;matrix=h.dense(max_dimension)
+        if np.max(np.abs(matrix-matrix.T))>1e-9:raise ArithmeticError('Non-Hermitian Hamiltonian.')
+        energies,vectors=np.linalg.eigh(matrix)
+        return [make_pole(h,e,x,np.linalg.norm(matrix@x-e*x),1) for e,x in zip(energies,vectors.T)]
+
+    def self_energy(self,energy,derivative=False,**kwargs):
+        return self_energy(self.hamiltonian,energy,derivative,**kwargs)
+
+__all__=['EPT','Hamiltonian','METHODS','ConvergenceError','HARTREE_TO_EV']
