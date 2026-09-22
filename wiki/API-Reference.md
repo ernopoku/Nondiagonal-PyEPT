@@ -8,12 +8,28 @@ calculation.dense_spectrum(max_dimension=2500)
 calculation.self_energy(energy, derivative=False)
 ```
 
+## Solver behavior
 
-- `kernel(targets=[...])` follows the primary pole with largest overlap on each target simple operator. It returns only residual-converged roots or raises `ConvergenceError`. Strongly mixed primary/satellite states can require inspection of the full spectrum. Duplicate convergence from two targets raises an error.
-- `dense_spectrum()` returns every pole for small systems, with a default dimension guard of 2500. It is also an independent eigensolver check on Davidson.
-- `self_energy(E)` evaluates the non-diagonal Schur complement with checked MINRES solves. `self_energy(E, derivative=True)` returns its analytic energy derivative. Energies at triple-space singularities can fail to converge and raise an exception.
-- A Dyson orbital is **not** unit-normalized by default. Its squared norm is its pole strength. `normalized_dyson_mo` provides the unit-normalized shape.
-- The program uses spatial four-index ERIs and spin-block contractions, avoiding a full spin-orbital V⁴ tensor. It does not use density fitting or distributed/out-of-core propagator tensors. `max_memory_mb` is a conservative preflight estimate, not an operating-system memory limit. Very large basis sets remain expensive.
+`kernel` follows the primary pole with largest overlap on each target simple operator. It returns residual-converged roots or raises `ConvergenceError`. Duplicate convergence from two targets raises an error. Strong mixing may require inspecting the full spectrum.
 
+`targets=None` selects active occupied spatial MOs for IP and active virtual spatial MOs for EA. Explicit targets are original zero-based spatial-MO indices. `spin=0` selects alpha and `spin=1` beta; their spectra agree for closed-shell references.
 
-`targets=None` selects all active occupied spatial orbitals for IP and all active virtual spatial orbitals for EA. Explicit targets use the original zero-based spatial-MO indices. Both triple manifolds remain present.
+`dense_spectrum` includes satellites and is intended for small systems. Its default dimension guard is 2500.
+
+`self_energy` evaluates the non-diagonal Schur complement through checked MINRES solves. With `derivative=True`, it returns the analytic energy derivative. Triple-space singularities can cause a convergence exception.
+
+## Pole observables
+
+- `energy`: signed propagator pole in hartree.
+- `binding_energy_ev`: IP or EA, equal to minus the pole converted to eV.
+- `strength`: squared norm of the Dyson orbital.
+- `residual`: Hamiltonian eigenpair residual norm.
+- `dyson_mo`: active spatial-MO coefficients.
+- `dyson_ao`: AO coefficients, normalized in the AO overlap metric to the pole strength.
+- `normalized_dyson_mo`: unit-normalized orbital shape.
+
+## Memory
+
+The implementation uses spatial four-index integrals and spin-block contractions. It avoids a full spin-orbital virtual fourth-order tensor, but remains an in-core research implementation. `max_memory_mb` is a conservative preflight estimate, not an operating-system memory cap.
+
+[[Home]] | [[Examples]]
