@@ -4,7 +4,8 @@
 
 Non-diagonal electron propagator calculations in Python, using NumPy, SciPy, and PySCF. The implemented approximations follow the Opoku–Pawłowski–Ortiz articles cited below.
 
-E. Opoku, F. Pawłowski, J. V. Ortiz, *J. Chem. Phys.* **159**, 124109 (2023), [doi:10.1063/5.0168779](https://doi.org/10.1063/5.0168779)
+- E. Opoku, F. Pawłowski, J. V. Ortiz, *J. Chem. Phys.* **159**, 124109 (2023), [doi:10.1063/5.0168779](https://doi.org/10.1063/5.0168779).
+- E. Opoku, F. Pawłowski, J. V. Ortiz, *J. Chem. Phys.* **155**, 204107 (2021), [doi:10.1063/5.0070849](https://doi.org/10.1063/5.0070849).
 
 The core uses a **matrix-free Hermitian Hamiltonian**, explicit antisymmetric spin-orbital tensors, PySCF integrals, and residual-controlled Davidson iterations. Both 2h1p and 2p1h manifolds are retained. This is a research implementation with the validation scope described below.
 
@@ -92,7 +93,7 @@ BD-T1 is implemented and algebraically tested, with small-molecule execution tes
 
 - E. Opoku, F. Pawłowski, J. V. Ortiz, *J. Chem. Phys.* **159**, 124109 (2023), [doi:10.1063/5.0168779](https://doi.org/10.1063/5.0168779), especially Eqs. 18–24, 28–33 and Table IV.
 - E. Opoku, F. Pawłowski, J. V. Ortiz, *J. Chem. Phys.* **155**, 204107 (2021), [doi:10.1063/5.0070849](https://doi.org/10.1063/5.0070849).
-- An erratum exists at [doi:10.1063/5.0167154](https://doi.org/10.1063/5.0167154). Its full text was not available during this work; the implemented new-method definitions use the supplied 2023 article and explicitly documented block definitions, rather than assuming the uncorrected 2021 formulas are definitive.
+- An erratum exists at [doi:10.1063/5.0167154](https://doi.org/10.1063/5.0167154). 
 - [PySCF AO-to-MO documentation](https://pyscf.org/contributor/ao2mo_developer.html). The BD reference uses `pyscf.cc.bccd.bccd_kernel_` and the spin-amplitude conversion in `pyscf.cc.addons`.
 
 ## Cartesian geometry and multiple methods
