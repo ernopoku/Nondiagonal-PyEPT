@@ -4,6 +4,8 @@
 
 Non-diagonal electron propagator calculations in Python, using NumPy, SciPy, and PySCF. The implemented approximations follow the Opoku–Pawłowski–Ortiz articles cited below.
 
+E. Opoku, F. Pawłowski, J. V. Ortiz, *J. Chem. Phys.* **159**, 124109 (2023), [doi:10.1063/5.0168779](https://doi.org/10.1063/5.0168779)
+
 The core uses a **matrix-free Hermitian Hamiltonian**, explicit antisymmetric spin-orbital tensors, PySCF integrals, and residual-controlled Davidson iterations. Both 2h1p and 2p1h manifolds are retained. This is a research implementation with the validation scope described below.
 
 ## Implemented methods
