@@ -67,3 +67,21 @@ def test_brueckner_path_preserves_reference():
     np.testing.assert_allclose(d,d.T,atol=1e-12)
     np.testing.assert_allclose(np.diag(d),h.diagonal(),atol=1e-12)
     p=ep.kernel([0])[0];assert p.residual<1e-9
+
+
+def test_multiple_methods_match_individual(mf):
+    from nondiagonal_ept import run_methods
+    methods = ['NRL3', 'NRQ3', 'NRP3']
+    results = run_methods(mf, methods, frozen=1, targets=iter([4, 2]))
+    assert list(results) == methods
+    for method in methods:
+        expected = EPT(mf, method, frozen=1).kernel([4, 2])
+        assert [p.target for p in results[method]] == [4, 2]
+        np.testing.assert_allclose([p.energy for p in results[method]],
+                                   [p.energy for p in expected], atol=1e-12)
+        assert all(p.residual < 1e-9 for p in results[method])
+    for invalid in [[], ['ND2', 'ADC(2)']]:
+        with pytest.raises(ValueError): run_methods(mf, invalid)
+    with pytest.raises(TypeError): run_methods(mf, 'NRL3')
+    with pytest.raises(ConvergenceError):
+        run_methods(mf, ['NRL3'], frozen=1, targets=[4], max_cycle=1)

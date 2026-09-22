@@ -42,3 +42,43 @@ python -m nondiagonal_ept examples/hf.json -o hf_results.json
 ```
 
 [[Home]] | [[API-Reference]]
+
+## Cartesian geometry and multiple methods
+
+Use one Cartesian row per atom: element, x, y, z. Set `unit="Angstrom"`
+explicitly. The following example uses F at the origin and a 0.9168 Å bond.
+This differs from the earlier 0.9178 Å example, so energies will differ slightly.
+
+```python
+from pyscf import gto, scf
+from nondiagonal_ept import run_methods
+
+mol = gto.M(
+    atom="""
+    F   0.0000   0.0000   0.0000
+    H   0.0000   0.0000   0.9168
+    """,
+    unit="Angstrom",
+    basis="cc-pvtz",
+    verbose=0,
+)
+mf = scf.RHF(mol).run(conv_tol=1e-12)
+
+results = run_methods(
+    mf, ["NRL3", "NRQ3", "NRP3"],
+    frozen=1, sector="ip", targets=[4, 2], tol=1e-9,
+)
+for method, poles in results.items():
+    print(f"\n{method}")
+    for pole in poles:
+        print(f"MO {pole.target}: IP = {pole.binding_energy_ev:.6f} eV, "
+              f"strength = {pole.strength:.6f}, residual = {pole.residual:.2e}")
+```
+
+`run_methods` reuses the converged RHF reference and runs each requested method
+sequentially. It returns a dictionary keyed by canonical method name, with a
+list of poles for each method. Propagator intermediates are built separately
+for each method. All EPT options and solver settings are shared. Duplicate
+methods (including aliases) are rejected; convergence failures raise an exception.
+The existing single-method `EPT` interface remains available.
+
