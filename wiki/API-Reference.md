@@ -22,7 +22,7 @@ calculation.self_energy(energy, derivative=False)
 
 - `energy`: signed propagator pole in hartree.
 - `binding_energy_ev`: IP or EA, equal to minus the pole converted to eV.
-- `strength`: squared norm of the Dyson orbital.
+- `strength`: pole strength (displayed as **PS**), the squared norm of the Dyson orbital.
 - `residual`: Hamiltonian eigenpair residual norm.
 - `dyson_mo`: active spatial-MO coefficients.
 - `dyson_ao`: AO coefficients, normalized in the AO overlap metric to the pole strength.

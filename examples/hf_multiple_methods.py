@@ -20,4 +20,4 @@ for method, poles in results.items():
     print(f"\n{method}")
     for pole in poles:
         print(f"MO {pole.target}: IP = {pole.binding_energy_ev:.6f} eV, "
-              f"strength = {pole.strength:.6f}, residual = {pole.residual:.2e}")
+              f"PS = {pole.strength:.6f}, residual = {pole.residual:.2e}")

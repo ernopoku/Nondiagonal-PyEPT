@@ -52,7 +52,8 @@ mf = scf.RHF(mol).run(conv_tol=1e-12)
 
 calculation = EPT(mf, "NRL3", frozen=1, sector="ip")
 for pole in calculation.kernel(targets=[4, 2], tol=1e-9):
-    print(pole.binding_energy_ev, pole.strength, pole.residual)
+    print(f"IP = {pole.binding_energy_ev:.6f} eV, PS = {pole.strength:.6f}, "
+          f"residual = {pole.residual:.2e}")
     # pole.dyson_mo: active spatial-MO coefficients, norm squared = strength
     # pole.dyson_ao: AO coefficients, C.T @ S_AO @ C = strength
 ```
@@ -115,7 +116,7 @@ for method, poles in results.items():
     print(f"\n{method}")
     for pole in poles:
         print(f"MO {pole.target}: IP = {pole.binding_energy_ev:.6f} eV, "
-              f"strength = {pole.strength:.6f}, residual = {pole.residual:.2e}")
+              f"PS = {pole.strength:.6f}, residual = {pole.residual:.2e}")
 ```
 
 `run_methods` reuses the converged RHF reference and runs each requested method
@@ -144,3 +145,5 @@ Bug reports, method improvements, tests, examples, and documentation contributio
 are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) for setup, numerical validation,
 and pull-request guidance. Report problems through
 [GitHub Issues](https://github.com/ernopoku/Nondiagonal-PyEPT/issues).
+
+Printed examples label pole strength as **PS**. The Python attribute `pole.strength` and machine-readable JSON fields retain their existing names for compatibility.

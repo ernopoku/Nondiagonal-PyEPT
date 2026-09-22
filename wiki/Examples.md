@@ -10,7 +10,8 @@ mol = gto.M(atom="H 0 0 0; F 0 0 0.9178", basis="cc-pvtz", verbose=0)
 mf = scf.RHF(mol).run(conv_tol=1e-12)
 calculation = EPT(mf, "NRL3", frozen=1, sector="ip")
 for pole in calculation.kernel(targets=[4, 2], tol=1e-9):
-    print(pole.binding_energy_ev, pole.strength, pole.residual)
+    print(f"IP = {pole.binding_energy_ev:.6f} eV, PS = {pole.strength:.6f}, "
+          f"residual = {pole.residual:.2e}")
 ```
 
 Targets use zero-based indices in the original spatial MO list, before freezing. `frozen=1` excludes the lowest occupied spatial MO; a list can exclude occupied and/or virtual orbitals.
@@ -72,7 +73,7 @@ for method, poles in results.items():
     print(f"\n{method}")
     for pole in poles:
         print(f"MO {pole.target}: IP = {pole.binding_energy_ev:.6f} eV, "
-              f"strength = {pole.strength:.6f}, residual = {pole.residual:.2e}")
+              f"PS = {pole.strength:.6f}, residual = {pole.residual:.2e}")
 ```
 
 `run_methods` reuses the converged RHF reference and runs each requested method
