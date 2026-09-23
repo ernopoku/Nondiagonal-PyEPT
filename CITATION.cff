@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "Please cite this software and the relevant scientific method papers listed in CITATION.md. Record the commit used for reproducibility."
 type: software
-title: "Nondiagonal PyEPT"
+title: "Nondiagonal PyEPT: Reference Implementation of Non-diagonal Electron Propagator Methods"
 authors:
   - family-names: "Opoku"
     given-names: "Ernest"
