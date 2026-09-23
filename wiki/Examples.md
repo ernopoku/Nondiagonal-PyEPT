@@ -10,8 +10,7 @@ mol = gto.M(atom="H 0 0 0; F 0 0 0.9178", basis="cc-pvtz", verbose=0)
 mf = scf.RHF(mol).run(conv_tol=1e-12)
 calculation = EPT(mf, "NRL3", frozen=1, sector="ip")
 for pole in calculation.kernel(targets=[4, 2], tol=1e-9):
-    print(f"IP = {pole.binding_energy_ev:.6f} eV, PS = {pole.strength:.6f}, "
-          f"residual = {pole.residual:.2e}")
+    print(pole.binding_energy_ev, pole.strength, pole.residual)
 ```
 
 Targets use zero-based indices in the original spatial MO list, before freezing. `frozen=1` excludes the lowest occupied spatial MO; a list can exclude occupied and/or virtual orbitals.
@@ -46,40 +45,25 @@ python -m nondiagonal_ept examples/hf.json -o hf_results.json
 
 ## Cartesian geometry and multiple methods
 
-Use one Cartesian row per atom: element, x, y, z. Set `unit="Angstrom"`
-explicitly. The following example uses F at the origin and a 0.9168 Å bond.
-This differs from the earlier 0.9178 Å example, so energies will differ slightly.
+Use one row per atom (element, x, y, z), with explicit ångström units. This example uses a 0.9168 Å bond, rather than the earlier 0.9178 Å bond.
 
 ```python
 from pyscf import gto, scf
 from nondiagonal_ept import run_methods
 
-mol = gto.M(
-    atom="""
-    F   0.0000   0.0000   0.0000
-    H   0.0000   0.0000   0.9168
-    """,
-    unit="Angstrom",
-    basis="cc-pvtz",
-    verbose=0,
-)
+mol = gto.M(atom="""
+F  0.0000  0.0000  0.0000
+H  0.0000  0.0000  0.9168
+""", unit="Angstrom", basis="cc-pvtz", verbose=0)
 mf = scf.RHF(mol).run(conv_tol=1e-12)
-
-results = run_methods(
-    mf, ["NRL3", "NRQ3", "NRP3"],
-    frozen=1, sector="ip", targets=[4, 2], tol=1e-9,
-)
+results = run_methods(mf, ["NRL3", "NRQ3", "NRP3"],
+                      frozen=1, sector="ip", targets=[4, 2], tol=1e-9)
 for method, poles in results.items():
-    print(f"\n{method}")
+    print(method)
     for pole in poles:
-        print(f"MO {pole.target}: IP = {pole.binding_energy_ev:.6f} eV, "
-              f"PS = {pole.strength:.6f}, residual = {pole.residual:.2e}")
+        print(pole.target, pole.binding_energy_ev, pole.strength, pole.residual)
 ```
 
-`run_methods` reuses the converged RHF reference and runs each requested method
-sequentially. It returns a dictionary keyed by canonical method name, with a
-list of poles for each method. Propagator intermediates are built separately
-for each method. All EPT options and solver settings are shared. Duplicate
-methods (including aliases) are rejected; convergence failures raise an exception.
-The existing single-method `EPT` interface remains available.
+Update your checkout with `git pull` and reinstall with `python -m pip install -e .` before importing `run_methods`. It reuses the converged RHF reference, executes methods sequentially, and returns canonical method names mapped to lists of poles. Each method builds separate propagator intermediates. Duplicate methods are rejected; convergence failures raise an exception. All EPT constructor options and kernel solver controls are supported.
 
+[Runnable example](https://github.com/ernopoku/Nondiagonal-PyEPT/blob/main/examples/hf_multiple_methods.py)

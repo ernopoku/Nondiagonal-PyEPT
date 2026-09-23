@@ -90,4 +90,15 @@ Some BLAS builds run small tensor contractions faster with one thread. The recor
 
 ## Static nD-NRL3 extension
 
-See [the dedicated validation and definition](NON_DYSON_NRL3.md) and [ten IP/EA comparisons](non_dyson_comparison.json). This extension has independent dense-resolvent and weak-coupling checks but no external nD-NRL3 benchmark implementation. The full suite now passes 55 tests.
+See [the dedicated validation and definition](NON_DYSON_NRL3.md) and [ten IP/EA comparisons](non_dyson_comparison.json). This extension has independent dense-resolvent and weak-coupling checks but no external nD-NRL3 benchmark implementation. That extension added its own algebra and molecular checks.
+
+
+## Separate-sector additions
+
+The complete suite now passes **70 tests**. See [SECTOR_ISR.md](SECTOR_ISR.md)
+for direct-PySCF nD-ADC(3) checks and independent fourth-order remainder tests
+for the experimental NRL3 canonical reduction. Eighteen small-basis IP/EA
+roots for HF, water and N2 differ from parent NRL3 by at most 0.023585 eV with
+NRL3-ISR(3). Some roots are nearly dark satellites; root order does not identify
+orbital character. These are internal comparisons, not external validation
+of a newly derived many-electron method. Raw data: [sector_comparison.json](sector_comparison.json).

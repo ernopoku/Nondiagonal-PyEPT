@@ -58,13 +58,13 @@ class Integrals:
         return out
 
 
-def from_pyscf(mf, frozen=0, max_memory_mb=2000, *, _brueckner=False):
+def reference_space(mf, frozen=0, max_memory_mb=2000, *, _brueckner=False):
     """Transform a converged, real, canonical closed-shell RHF reference.
 
     frozen: count of lowest occupied spatial MOs, or explicit spatial MO indices
     (occupied or virtual). Frozen orbitals retain their mean-field contribution.
     """
-    from pyscf import ao2mo, scf
+    from pyscf import scf
     if not isinstance(mf, scf.hf.RHF) or isinstance(mf, scf.rohf.ROHF) or hasattr(mf, 'xc'):
         raise TypeError('A molecular closed-shell RHF reference is required; UHF/ROHF/DFT are not supported.')
     if not mf.converged: raise ValueError('SCF did not converge.')
@@ -95,6 +95,14 @@ def from_pyscf(mf, frozen=0, max_memory_mb=2000, *, _brueckner=False):
         check[:no,no:]=0;check[no:,:no]=0
     if np.max(np.abs(check))>2e-6:
         raise ValueError('Reference orbitals are not canonical RHF orbitals.')
+    return active, c, f, no
+
+
+def from_pyscf(mf, frozen=0, max_memory_mb=2000, *, _brueckner=False):
+    """Transform a validated RHF reference to active spin-orbital integrals."""
+    from pyscf import ao2mo
+    active, c, f, no = reference_space(mf, frozen, max_memory_mb,
+                                      _brueckner=_brueckner)
     # Transformation workspace + restored spatial ERIs; no full spin n^4 array.
     nspin=2*len(active);ospin=2*no;vspin=nspin-ospin
     estimate = (4*len(active)**4 + 6*nspin*ospin*vspin*vspin

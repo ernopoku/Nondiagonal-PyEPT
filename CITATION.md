@@ -36,3 +36,17 @@ updates made on the main branch.
 See [theory](docs/THEORY.md) for implemented definitions and
 [validation](docs/VALIDATION.md) for the scope of checks and remaining limitations.
 Also acknowledge PySCF using its [citation guidance](https://pyscf.org/citation.html).
+
+
+## Separate-sector methods
+
+For `nD-ADC(3)`, also cite Schirmer, Trofimov and Stelter, *J. Chem. Phys.*
+**109**, 4734 (1998), [article](https://files.isu.ru/ru/about/others/lab_kvant_himii/docs/nondys.pdf),
+and the relevant implementation papers in the [PySCF ADC documentation](https://pyscf.org/user/adc.html).
+
+For experimental `NRL3-ISR(3)`, cite the NRL3 paper and the exact software
+commit, and identify it as the **canonical auxiliary-matrix construction**
+defined in [SECTOR_ISR.md](docs/SECTOR_ISR.md). It is not a published
+non-Dyson NRL3 theory. The general canonical transformation is described by
+Bravyi, DiVincenzo and Loss, *Ann. Phys.* **326**, 2793 (2011),
+[doi:10.1016/j.aop.2011.06.004](https://doi.org/10.1016/j.aop.2011.06.004).

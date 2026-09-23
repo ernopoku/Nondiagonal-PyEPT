@@ -22,7 +22,7 @@ calculation.self_energy(energy, derivative=False)
 
 - `energy`: signed propagator pole in hartree.
 - `binding_energy_ev`: IP or EA, equal to minus the pole converted to eV.
-- `strength`: pole strength (displayed as **PS**), the squared norm of the Dyson orbital.
+- `strength`: squared norm of the Dyson orbital.
 - `residual`: Hamiltonian eigenpair residual norm.
 - `dyson_mo`: active spatial-MO coefficients.
 - `dyson_ao`: AO coefficients, normalized in the AO overlap metric to the pole strength.
@@ -33,13 +33,3 @@ calculation.self_energy(energy, derivative=False)
 The implementation uses spatial four-index integrals and spin-block contractions. It avoids a full spin-orbital virtual fourth-order tensor, but remains an in-core research implementation. `max_memory_mb` is a conservative preflight estimate, not an operating-system memory cap.
 
 [[Home]] | [[Examples]]
-
-## Multiple methods
-
-```python
-from nondiagonal_ept import run_methods
-results = run_methods(mf, ["NRL3", "NRQ3", "NRP3"],
-                      frozen=1, sector="ip", targets=[4, 2], tol=1e-9)
-```
-
-Returns canonical method names mapped to lists of poles. The same converged SCF reference is reused; methods execute sequentially with separate intermediates. All `EPT` constructor options and `kernel` solver controls are supported. Empty lists and duplicate canonical methods are rejected. A string must be wrapped in a list.

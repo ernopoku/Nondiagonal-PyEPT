@@ -27,6 +27,8 @@ METHODS = {
 
 def method_spec(name, sector='ip'):
     name=name.upper().replace(' ','')
+    if name in ('ND-ADC(3)', 'NRL3-ISR(3)'):
+        raise ValueError('Use SectorEPT(...).kernel(nroots=...) for separate-sector methods.')
     if name=='ADC(2)':name='ND2'
     if name in ('ADC(3)-STRICT','STRICT-ADC(3)'): name='3+'
     if name=='ADC(3)':

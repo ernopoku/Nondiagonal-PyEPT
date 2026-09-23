@@ -2,12 +2,12 @@
 
 [License: MIT](LICENSE) · [Citation](CITATION.md) · [Contributing](CONTRIBUTING.md)
 
-Non-diagonal electron propagator calculations in Python, using NumPy, SciPy, and PySCF. The implemented approximations follow the Opoku–Pawłowski–Ortiz articles cited below.
+Non-diagonal electron propagator calculations in Python, using NumPy, SciPy, and PySCF. The original Dyson approximations follow the Opoku–Pawłowski–Ortiz articles cited below. Separate-sector ADC(3) and an explicitly experimental NRL3-derived representation are also available.
 
 - E. Opoku, F. Pawłowski, J. V. Ortiz, *J. Chem. Phys.* **159**, 124109 (2023), [doi:10.1063/5.0168779](https://doi.org/10.1063/5.0168779).
 - E. Opoku, F. Pawłowski, J. V. Ortiz, *J. Chem. Phys.* **155**, 204107 (2021), [doi:10.1063/5.0070849](https://doi.org/10.1063/5.0070849).
 
-The core uses a **matrix-free Hermitian Hamiltonian**, explicit antisymmetric spin-orbital tensors, PySCF integrals, and residual-controlled Davidson iterations. Both 2h1p and 2p1h manifolds are retained. This is a research implementation with the validation scope described below.
+The core uses a **matrix-free Hermitian Hamiltonian**, explicit antisymmetric spin-orbital tensors, PySCF integrals, and residual-controlled Davidson iterations. The original Dyson methods retain both 2h1p and 2p1h manifolds. This is a research implementation with the validation scope described below.
 
 ## Implemented methods
 
@@ -25,7 +25,7 @@ The core uses a **matrix-free Hermitian Hamiltonian**, explicit antisymmetric sp
 
 `sector="ea"` applies the particle–hole counterpart of the asymmetric NR2/NRP3/NRQ3 truncations. ND2, 2ph-TDA, NRL3, 3+, and BD-T1 have the same Hamiltonian for IP and EA. Merely changing the sign of an IP does not implement an EA-specific NRQ3 calculation.
 
-**Reference scope:** real, molecular, closed-shell RHF; BD-T1 automatically constructs a semicanonical Brueckner reference with PySCF BCCD. UHF, ROHF, DFT, density-fitted SCF references, complex/spinor orbitals, periodic systems, gradients, and non-Dyson ADC are not implemented. The static `nD-NRL3` extension is supported; it is distinct from non-Dyson ADC. The generic name `ADC(3)` is deliberately rejected: use `ADC(3)-strict`. Fourth-order/renormalized-static ADC(3) variants and the articles' diagonal-only methods are outside this implementation.
+**Reference scope:** real, molecular, closed-shell RHF; BD-T1 automatically constructs a semicanonical Brueckner reference with PySCF BCCD. UHF, ROHF, DFT, density-fitted SCF references, complex/spinor orbitals, periodic systems and gradients are not implemented. Established non-Dyson ADC(3) is available through `SectorEPT` (PySCF >= 2.14); see below. The static `nD-NRL3` extension is supported; it is distinct from non-Dyson ADC. The generic name `ADC(3)` is deliberately rejected: use `ADC(3)-strict`. Fourth-order/renormalized-static ADC(3) variants and the articles' diagonal-only methods are outside this implementation.
 
 ## Install and run
 
@@ -152,3 +152,28 @@ Printed examples label pole strength as **PS**. The Python attribute `pole.stren
 ## Static non-Dyson NRL3
 
 Use `EPT(mf, "nD-NRL3", frozen=1, sector="ip")` or include `"nD-NRL3"` in `run_methods`. For IP, 2ph contributions are frozen at HF orbital energies and symmetrized; for EA, 2hp contributions are frozen instead. See [equations, PS interpretation, examples, and validation limits](docs/NON_DYSON_NRL3.md).
+
+
+## Separate IP/EA intermediate-state representations
+
+```python
+from nondiagonal_ept import SectorEPT, run_sector_methods
+
+# Established non-Dyson ADC(3); counts states rather than targeting MO indices.
+poles = SectorEPT(mf, "nD-ADC(3)", frozen=1, sector="ip").kernel(nroots=3)
+
+# For a SMALL basis: compare with the experimental NRL3-derived sector model.
+results = run_sector_methods(mf, ["nD-ADC(3)", "NRL3-ISR(3)"],
+                             frozen=1, sector="ip", nroots=3)
+```
+
+Install `python -m pip install -e '.[sector]'` for the ADC dependency.
+`NRL3-ISR(3)` is a third-order canonical reduction of the NRL3 auxiliary matrix,
+with consistently transformed Dyson amplitudes. It is **experimental**, uses
+dense matrices (default full-dimension limit 1200), and is not a separately
+derived ground-state-metric non-Dyson NRL3 theory. It is distinct from the
+static `nD-NRL3` extension. No large-basis speedup is claimed.
+
+Read the [derivation, API, PS conventions and validation](docs/SECTOR_ISR.md)
+or the [step-by-step Wiki guide](https://github.com/ernopoku/Nondiagonal-PyEPT/wiki/Separate-Sector-Methods).
+Run `python examples/sector_methods.py` for a small working example.

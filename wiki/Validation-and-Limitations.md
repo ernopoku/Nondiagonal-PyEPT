@@ -1,6 +1,6 @@
 # Validation and limitations
 
-All 38 automated tests passed for the publication copy. Tests cover independent determinant-operator algebra, PySCF MP2 agreement, the strict third-order limit against full CI, Davidson versus dense diagonalization, Hermiticity, spin symmetry, MO-phase invariance, spectral sum rules, Dyson normalization, and self-energy derivatives.
+All 70 automated tests passed for the current implementation. Tests cover independent determinant-operator algebra, PySCF MP2 agreement, the strict third-order limit against full CI, Davidson versus dense diagonalization, Hermiticity, spin symmetry, MO-phase invariance, spectral sum rules, Dyson normalization, and self-energy derivatives.
 
 ## Molecular comparisons
 
@@ -22,6 +22,10 @@ python examples/diagnose_convergence.py --molecule H2O --method NRL3 --target 3
 
 BD-T1 now has an N2/cc-pVDZ fixed-core molecular regression for three IP poles, agreeing within 1.8 microhartree. See [BD-T1 validation](https://github.com/ernopoku/Nondiagonal-PyEPT/blob/main/docs/BD_T1_VALIDATION.md). The articles' full statistical datasets have not been reproduced. The 2021 erratum full text was unavailable during implementation.
 
-Only real molecular closed-shell RHF references are supported; BD-T1 prepares its own Brueckner reference. UHF/ROHF, DFT, density-fitted references, periodic systems, complex orbitals, gradients, non-Dyson ADC, diagonal-only methods, and renormalized-static ADC(3) variants are outside scope. Large-molecule and distributed performance has not been characterized.
+Only real molecular closed-shell RHF references are supported; BD-T1 prepares its own Brueckner reference. UHF/ROHF, DFT, density-fitted references, periodic systems, complex orbitals, gradients, diagonal-only methods, and renormalized-static ADC(3) variants are outside scope. Large-molecule and distributed performance has not been characterized.
+
+## Separate-sector additions
+
+Established `nD-ADC(3)` is available through PySCF, alongside experimental `NRL3-ISR(3)`, a canonical reduction of the NRL3 auxiliary matrix. The latter has fourth-order remainder and internal molecular checks, but is not a separately derived ground-state-metric non-Dyson NRL3 theory. It is a dense small-system prototype. See [[Separate Sector Methods|Separate-Sector-Methods]] for derivations, examples and validation limits.
 
 [[Home]] | [[Methods-and-Theory]]

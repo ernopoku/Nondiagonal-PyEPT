@@ -1,0 +1,413 @@
+{
+  "pyscf_version": "2.14.0",
+  "cases": [
+    {
+      "molecule": "HF",
+      "atom": "F 0 0 0; H 0 0 .9168",
+      "basis": "6-31g",
+      "unit": "Angstrom",
+      "frozen": 1,
+      "sector": "ip",
+      "NRL3": [
+        {
+          "binding_energy_ev": 15.095806538377314,
+          "PS": 0.9422666726329044
+        },
+        {
+          "binding_energy_ev": 15.095806538377346,
+          "PS": 0.9422666726329044
+        },
+        {
+          "binding_energy_ev": 19.096329663860484,
+          "PS": 0.9524869096213426
+        }
+      ],
+      "nD-ADC(3)": [
+        {
+          "binding_energy_ev": 15.694806592850624,
+          "PS": 0.949236734575148,
+          "residual": 5.98518727755548e-12
+        },
+        {
+          "binding_energy_ev": 15.6948065929234,
+          "PS": 0.9492367345780874,
+          "residual": 5.846768376967297e-11
+        },
+        {
+          "binding_energy_ev": 19.482891039837394,
+          "PS": 0.956630044755329,
+          "residual": 4.2023834699299385e-11
+        }
+      ],
+      "NRL3-ISR(3)": [
+        {
+          "binding_energy_ev": 15.100597569272093,
+          "PS": 0.9423571926339106,
+          "residual": 3.3418962613473725e-15
+        },
+        {
+          "binding_energy_ev": 15.100597569272226,
+          "PS": 0.9423571926339119,
+          "residual": 3.0057533965993514e-15
+        },
+        {
+          "binding_energy_ev": 19.09301519152103,
+          "PS": 0.9525850977452559,
+          "residual": 2.421681509364238e-15
+        }
+      ],
+      "diagnostics": {
+        "full_dimension": 346,
+        "sector_dimension": 136,
+        "minimum_denominator_hartree": 0.8408000920234435,
+        "generator_frobenius_norms": [
+          0.34780350461453435,
+          0.04141575799338074,
+          0.009169491278045836
+        ],
+        "remaining_cross_sector_norm_hartree": 0.004780020598677601,
+        "omitted_higher_order_norm_hartree": 0.007220131738136254
+      }
+    },
+    {
+      "molecule": "HF",
+      "atom": "F 0 0 0; H 0 0 .9168",
+      "basis": "6-31g",
+      "unit": "Angstrom",
+      "frozen": 1,
+      "sector": "ea",
+      "NRL3": [
+        {
+          "binding_energy_ev": -5.508880182846131,
+          "PS": 0.9843579788294786
+        },
+        {
+          "binding_energy_ev": -17.641036705669237,
+          "PS": 0.0001439079364048265
+        },
+        {
+          "binding_energy_ev": -17.641036705669286,
+          "PS": 0.000143907936404824
+        }
+      ],
+      "nD-ADC(3)": [
+        {
+          "binding_energy_ev": -5.46490598519536,
+          "PS": 0.9848282856816462,
+          "residual": 5.14103950614684e-11
+        },
+        {
+          "binding_energy_ev": -17.637831032040403,
+          "PS": 0.0001129786918757454,
+          "residual": 1.8844759720540036e-11
+        },
+        {
+          "binding_energy_ev": -17.637831032040456,
+          "PS": 0.00011297869187575481,
+          "residual": 1.884480709971639e-11
+        }
+      ],
+      "NRL3-ISR(3)": [
+        {
+          "binding_energy_ev": -5.496760612417596,
+          "PS": 0.9843524347052961,
+          "residual": 4.0558455330780184e-16
+        },
+        {
+          "binding_energy_ev": -17.64073352622408,
+          "PS": 0.00013824117187824232,
+          "residual": 2.772411548801582e-15
+        },
+        {
+          "binding_energy_ev": -17.640733526224103,
+          "PS": 0.00013824117187824365,
+          "residual": 2.3301855236270575e-15
+        }
+      ],
+      "diagnostics": {
+        "full_dimension": 346,
+        "sector_dimension": 210,
+        "minimum_denominator_hartree": 0.8408000920234435,
+        "generator_frobenius_norms": [
+          0.34780350461453435,
+          0.04141575799338074,
+          0.009169491278045836
+        ],
+        "remaining_cross_sector_norm_hartree": 0.004780020598677601,
+        "omitted_higher_order_norm_hartree": 0.007220131738136254
+      }
+    },
+    {
+      "molecule": "H2O",
+      "atom": "O 0 0 0; H 0 -.7586 .5043; H 0 .7586 .5043",
+      "basis": "6-31g",
+      "unit": "Angstrom",
+      "frozen": 1,
+      "sector": "ip",
+      "NRL3": [
+        {
+          "binding_energy_ev": 11.807262704759838,
+          "PS": 0.9376908635705336
+        },
+        {
+          "binding_energy_ev": 13.453511525201808,
+          "PS": 0.9393007533125411
+        },
+        {
+          "binding_energy_ev": 19.697162398228524,
+          "PS": 0.9500677131794699
+        }
+      ],
+      "nD-ADC(3)": [
+        {
+          "binding_energy_ev": 12.242960938483629,
+          "PS": 0.9448215907198344,
+          "residual": 8.955519488910814e-11
+        },
+        {
+          "binding_energy_ev": 13.864591125225399,
+          "PS": 0.9459259470166546,
+          "residual": 4.5170489290504205e-11
+        },
+        {
+          "binding_energy_ev": 19.97569317314565,
+          "PS": 0.9546962537839473,
+          "residual": 6.033022167640931e-11
+        }
+      ],
+      "NRL3-ISR(3)": [
+        {
+          "binding_energy_ev": 11.808994028307167,
+          "PS": 0.937769894079447,
+          "residual": 2.9814948047960635e-15
+        },
+        {
+          "binding_energy_ev": 13.450366024414558,
+          "PS": 0.9393663932546984,
+          "residual": 2.3872838746004188e-15
+        },
+        {
+          "binding_energy_ev": 19.687790775247006,
+          "PS": 0.9501245196537604,
+          "residual": 2.7914793770407487e-15
+        }
+      ],
+      "diagnostics": {
+        "full_dimension": 556,
+        "sector_dimension": 180,
+        "minimum_denominator_hartree": 0.7170811988609831,
+        "generator_frobenius_norms": [
+          0.37368229877883097,
+          0.04811293949419226,
+          0.01027973484418194
+        ],
+        "remaining_cross_sector_norm_hartree": 0.005361894077371699,
+        "omitted_higher_order_norm_hartree": 0.007975342372599965
+      }
+    },
+    {
+      "molecule": "H2O",
+      "atom": "O 0 0 0; H 0 -.7586 .5043; H 0 .7586 .5043",
+      "basis": "6-31g",
+      "unit": "Angstrom",
+      "frozen": 1,
+      "sector": "ea",
+      "NRL3": [
+        {
+          "binding_energy_ev": -5.52570332193224,
+          "PS": 0.9797734415849869
+        },
+        {
+          "binding_energy_ev": -8.056688791716464,
+          "PS": 0.9718214767380658
+        },
+        {
+          "binding_energy_ev": -13.41851128865347,
+          "PS": 0.00014294873226750556
+        }
+      ],
+      "nD-ADC(3)": [
+        {
+          "binding_energy_ev": -5.502990329574623,
+          "PS": 0.981141530477638,
+          "residual": 1.9510628338226533e-11
+        },
+        {
+          "binding_energy_ev": -8.040893617225816,
+          "PS": 0.9737531302134756,
+          "residual": 2.216979780841765e-11
+        },
+        {
+          "binding_energy_ev": -13.415728631254135,
+          "PS": 0.00011609559109025645,
+          "residual": 3.7955523848962674e-11
+        }
+      ],
+      "NRL3-ISR(3)": [
+        {
+          "binding_energy_ev": -5.515648989475476,
+          "PS": 0.9797809794003735,
+          "residual": 1.6154393072292014e-16
+        },
+        {
+          "binding_energy_ev": -8.047876455441758,
+          "PS": 0.9718109077387185,
+          "residual": 2.660749676508612e-15
+        },
+        {
+          "binding_energy_ev": -13.418093531971705,
+          "PS": 0.00013137033170322783,
+          "residual": 2.804916584427183e-15
+        }
+      ],
+      "diagnostics": {
+        "full_dimension": 556,
+        "sector_dimension": 376,
+        "minimum_denominator_hartree": 0.7170811988609831,
+        "generator_frobenius_norms": [
+          0.37368229877883097,
+          0.04811293949419226,
+          0.01027973484418194
+        ],
+        "remaining_cross_sector_norm_hartree": 0.005361894077371699,
+        "omitted_higher_order_norm_hartree": 0.007975342372599965
+      }
+    },
+    {
+      "molecule": "N2",
+      "atom": "N 0 0 0; N 0 0 1.1136",
+      "basis": "sto-3g",
+      "unit": "Angstrom",
+      "frozen": 2,
+      "sector": "ip",
+      "NRL3": [
+        {
+          "binding_energy_ev": 13.25662870063397,
+          "PS": 0.9367977732868789
+        },
+        {
+          "binding_energy_ev": 16.44225619572926,
+          "PS": 0.9593032538427887
+        },
+        {
+          "binding_energy_ev": 16.442256195729296,
+          "PS": 0.9593032538427892
+        }
+      ],
+      "nD-ADC(3)": [
+        {
+          "binding_energy_ev": 13.458248723641685,
+          "PS": 0.9496276895036169,
+          "residual": 2.0326812999734263e-15
+        },
+        {
+          "binding_energy_ev": 15.995563225726764,
+          "PS": 0.9581357650255237,
+          "residual": 1.29966845440381e-15
+        },
+        {
+          "binding_energy_ev": 15.995563225726825,
+          "PS": 0.958135765025524,
+          "residual": 2.0659647526162076e-15
+        }
+      ],
+      "NRL3-ISR(3)": [
+        {
+          "binding_energy_ev": 13.25086941664886,
+          "PS": 0.9369133769442837,
+          "residual": 1.1763411251261833e-15
+        },
+        {
+          "binding_energy_ev": 16.452243893989838,
+          "PS": 0.9598013317623358,
+          "residual": 1.5395978688797357e-15
+        },
+        {
+          "binding_energy_ev": 16.452243893989838,
+          "PS": 0.9598013317623345,
+          "residual": 1.6339353642321255e-15
+        }
+      ],
+      "diagnostics": {
+        "full_dimension": 173,
+        "sector_dimension": 110,
+        "minimum_denominator_hartree": 0.8094975102606021,
+        "generator_frobenius_norms": [
+          0.5656597756902904,
+          0.07151788929966271,
+          0.0242879845523069
+        ],
+        "remaining_cross_sector_norm_hartree": 0.007416419113365508,
+        "omitted_higher_order_norm_hartree": 0.011245371058359448
+      }
+    },
+    {
+      "molecule": "N2",
+      "atom": "N 0 0 0; N 0 0 1.1136",
+      "basis": "sto-3g",
+      "unit": "Angstrom",
+      "frozen": 2,
+      "sector": "ea",
+      "NRL3": [
+        {
+          "binding_energy_ev": -9.074390616049595,
+          "PS": 0.967477818421566
+        },
+        {
+          "binding_energy_ev": -9.074390616049604,
+          "PS": 0.967477818421567
+        },
+        {
+          "binding_energy_ev": -13.896791412239946,
+          "PS": 5.056998701427521e-32
+        }
+      ],
+      "nD-ADC(3)": [
+        {
+          "binding_energy_ev": -8.776447304443343,
+          "PS": 0.9662694313787882,
+          "residual": 8.13973819454512e-16
+        },
+        {
+          "binding_energy_ev": -8.776447304443344,
+          "PS": 0.9662694313787881,
+          "residual": 1.1543080025935234e-15
+        },
+        {
+          "binding_energy_ev": -16.66515615125625,
+          "PS": 2.1342504474404698e-30,
+          "residual": 3.154108290613074e-15
+        }
+      ],
+      "NRL3-ISR(3)": [
+        {
+          "binding_energy_ev": -9.097975186513892,
+          "PS": 0.9679632768152496,
+          "residual": 5.869108740745789e-17
+        },
+        {
+          "binding_energy_ev": -9.097975186513922,
+          "PS": 0.9679632768152492,
+          "residual": 1.1375838083383141e-15
+        },
+        {
+          "binding_energy_ev": -13.896791412239931,
+          "PS": 6.173949318326362e-32,
+          "residual": 9.288936071323898e-16
+        }
+      ],
+      "diagnostics": {
+        "full_dimension": 173,
+        "sector_dimension": 63,
+        "minimum_denominator_hartree": 0.8094975102606021,
+        "generator_frobenius_norms": [
+          0.5656597756902904,
+          0.07151788929966271,
+          0.0242879845523069
+        ],
+        "remaining_cross_sector_norm_hartree": 0.007416419113365508,
+        "omitted_higher_order_norm_hartree": 0.011245371058359448
+      }
+    }
+  ]
+}

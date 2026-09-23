@@ -3,6 +3,7 @@ from .integrals import from_pyscf
 from .blocks import Hamiltonian
 from .methods import METHODS,method_spec
 from .solver import davidson,make_pole,self_energy,ConvergenceError,HARTREE_TO_EV
+from .sector import SectorEPT, run_sector_methods, SECTOR_METHODS
 import numpy as np
 
 class EPT:
@@ -80,4 +81,5 @@ def run_methods(mf, methods, *, targets=None, tol=1e-9, max_cycle=150,
     return results
 
 
-__all__=['run_methods','EPT','Hamiltonian','METHODS','ConvergenceError','HARTREE_TO_EV']
+__all__=['run_methods','EPT','Hamiltonian','METHODS','ConvergenceError','HARTREE_TO_EV',
+         'SectorEPT','run_sector_methods','SECTOR_METHODS']

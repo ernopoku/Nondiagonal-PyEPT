@@ -13,3 +13,6 @@ Python and PySCF tools for non-diagonal electron propagator calculations of ioni
 [Repository](https://github.com/ernopoku/Nondiagonal-PyEPT)
 
 This is a research implementation for real, molecular, closed-shell RHF references. Read the validation limits before interpreting results. BD-T1 constructs a Brueckner-doubles reference through PySCF.
+
+- [[Visualizing Dyson Orbitals|Visualizing-Dyson-Orbitals]] — export cube files, view surfaces, compare methods, and understand PS normalization.
+- [[Separate Sector Methods|Separate-Sector-Methods]] — established nD-ADC(3), experimental NRL3-ISR(3), equations, examples and validation limits.
