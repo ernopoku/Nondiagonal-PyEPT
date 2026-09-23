@@ -198,3 +198,17 @@ Use `static_tol=1e-10` and `static_max_cycle=500` to control the static solves;
 [working equations, examples and validation](docs/DYSON_ADC.md),
 [the Wiki guide](https://github.com/ernopoku/Nondiagonal-PyEPT/wiki/Dyson-ADC),
 and `examples/dyson_adc.py`. The JSON CLI also accepts these methods.
+
+### ADC(2) with DEM static correction
+
+Select `ADC(2)-DEM` for second-order ND2 dynamic blocks plus the same DEM
+static-response treatment used by `ADC(3)-DEM`. This is distinct from plain
+`ADC(2)`/`ND2`, whose behavior is unchanged:
+
+```python
+results = run_methods(mf, ["ND2", "ADC(2)-DEM", "ADC(3)-DEM"],
+                      frozen=1, sector="ip", targets=[4, 2])
+```
+
+The added static term begins at third order; the dynamic approximation
+remains second order. See the [definition and examples](docs/DYSON_ADC.md#adc2-dem-second-order-dynamics-with-a-dem-static-correction).

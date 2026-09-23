@@ -14,6 +14,7 @@ class Method:
     triple_correction: bool = False
 
 METHODS = {
+    'ADC(2)-DEM': Method('ADC(2)-DEM','dem'),
     'ADC(3)': Method('ADC(3)','dem',1.,1.,1.,1.,True,True),
     'ND-NRL3': Method('nD-NRL3','linear',.5,.5,.5,.5,True,True),
     'BD-T1': Method('BD-T1','none',.5,.5,.5,.5,True,True,True),

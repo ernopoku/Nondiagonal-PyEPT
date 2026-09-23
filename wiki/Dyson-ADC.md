@@ -1,10 +1,11 @@
-# Conventional Dyson ADC(2) and ADC(3)
+# Dyson ADC and DEM static extensions
 
 Use `EPT` for these methods. Both IP and EA are contained in the same Dyson Hamiltonian.
 
 | Name | Definition |
 |---|---|
 | `ADC(2)` / `ND2` | Conventional second-order Dyson self-energy |
+| `ADC(2)-DEM` | ND2 second-order dynamic blocks plus a DEM static correction |
 | `ADC(3)` / `ADC(3)-DEM` | Conventional Dyson ADC(3) with Schirmer–Angonoa DEM static self-energy |
 | `ADC(3)-strict` / `3+` | Strict third-order static self-energy, with the same ADC(3) dynamic blocks |
 | `nD-ADC(3)` | Separate IP/EA non-Dyson ADC(3), available through `SectorEPT` |
@@ -79,10 +80,27 @@ See [the complete equations and references](https://github.com/ernopoku/Nondiago
 
 ## Validation
 
-All **83 tests pass**. Independent checks include contour integration, a full spin-orbital linear system, fourth-order static accuracy against small-system FCI densities, IP/EA residues, frozen virtual orbitals, phase/spin invariance and failed-solver handling.
+All **94 tests pass**. Independent checks include contour integration, a full spin-orbital linear system, fourth-order static accuracy against small-system FCI densities, IP/EA residues, frozen virtual orbitals, phase/spin invariance and failed-solver handling.
 
-39 molecular poles across HF/cc-pVDZ, HF/cc-pVTZ, water/cc-pVDZ and N2/cc-pVDZ have residuals below 1e-9 hartree. These are internal comparisons, not validation against an independent molecular ADC(3)-DEM program. [Raw data](https://github.com/ernopoku/Nondiagonal-PyEPT/blob/main/docs/dyson_adc_comparison.json) can be regenerated with `python examples/validate_dyson_adc.py`.
+52 molecular poles across HF/cc-pVDZ, HF/cc-pVTZ, water/cc-pVDZ and N2/cc-pVDZ have residuals below 1e-9 hartree. These are internal comparisons, not validation against an independent molecular ADC(3)-DEM program. [Raw data](https://github.com/ernopoku/Nondiagonal-PyEPT/blob/main/docs/dyson_adc_comparison.json) can be regenerated with `python examples/validate_dyson_adc.py`.
 
 Real molecular canonical closed-shell RHF is required. Frozen orbitals retain their mean-field contribution; the correlation response uses active orbitals only. Large calculations remain memory intensive, although the static solver does not build a dense full propagator matrix.
 
 [Home](Home) · [Separate non-Dyson methods](Separate-Sector-Methods) · [Citation guidance](https://github.com/ernopoku/Nondiagonal-PyEPT/blob/main/CITATION.md)
+
+
+## ADC(2)-DEM: a static extension distinct from ND2
+
+Select `ADC(2)-DEM` to retain ND2 first-order vertices and zeroth-order 2hp/2ph energies while solving the same DEM static-response equation used by ADC(3)-DEM. Plain `ADC(2)` remains an alias for ND2.
+
+```python
+results = run_methods(mf, ["ND2", "ADC(2)-DEM", "ADC(3)-DEM"],
+                      frozen=1, sector="ip", targets=[4, 2], tol=1e-9)
+for method, poles in results.items():
+    for pole in poles:
+        print(method, pole.binding_energy_ev, "PS =", pole.strength)
+```
+
+The new result key is `ADC(2)-DEM`. For EA, use `sector="ea"` and a virtual target such as `[5]` for this HF example. Static controls, Dyson orbitals and CLI output work as above. Run `python -m nondiagonal_ept examples/hf_adc2_dem.json -o hf_adc2_dem_results.json`.
+
+The correction begins at third order and includes selected higher orders through the response solve. Its leading static term matches the third-order static matrix of `3+`, but the dynamic terms remain second order. Thus it is a specifically defined static extension, not complete ADC(3) or a redefinition of conventional ADC(2). The reference orbitals remain fixed. Better physical accuracy is not guaranteed; no independent external ADC(2)-DEM benchmark is claimed. Tests check the contour density, spin-orbital response, perturbation order, unchanged ND2 dynamic blocks, molecular residues and convergence failures.

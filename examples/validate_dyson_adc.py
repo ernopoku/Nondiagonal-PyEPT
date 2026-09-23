@@ -15,7 +15,7 @@ report = {'pyscf_version': pyscf.__version__, 'cases': []}
 for name, atom, basis, frozen, ip, ea in cases:
     mf = scf.RHF(gto.M(atom=atom, unit='Angstrom', basis=basis, verbose=0)).run(conv_tol=1e-12)
     # Dyson Hamiltonians are the same in both sectors: reuse each for both.
-    for method in ('ADC(2)', '3+', 'ADC(3)'):
+    for method in ('ADC(2)', 'ADC(2)-DEM', '3+', 'ADC(3)'):
         calc = EPT(mf, method, frozen=frozen)
         data = dict(molecule=name, atom=atom, unit='Angstrom', basis=basis,
                     frozen=frozen, method=method, hf_energy_hartree=mf.e_tot, poles=[])

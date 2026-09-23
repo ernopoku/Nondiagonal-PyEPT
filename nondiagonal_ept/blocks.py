@@ -82,7 +82,7 @@ class Hamiltonian:
             t=np.asarray(doubles);s=np.zeros((o,v))
             if t.shape!=(o,o,v,v):raise ValueError('Wrong doubles shape.')
         else:
-            t,s=amplitudes(ints) if need_ip or need_ea or m.static!='none' else (None,None)
+            t,s=amplitudes(ints) if need_ip or need_ea or m.static not in ('none','dem') else (None,None)
         b,c,d,f=vertices(ints,t,need_ip,need_ea)
         wi=np.r_[np.full(o,m.ip_vertex_h),np.full(v,m.ip_vertex_p)]
         we=np.r_[np.full(o,m.ea_vertex_h),np.full(v,m.ea_vertex_p)]

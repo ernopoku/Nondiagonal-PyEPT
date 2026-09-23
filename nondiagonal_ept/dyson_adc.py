@@ -1,6 +1,6 @@
-"""Schirmer--Angonoa Dyson-expansion static self-energy for Dyson ADC(3).
+"""Schirmer--Angonoa Dyson-expansion static self-energy for Dyson ADC.
 
-Dynamic ADC(3) vertices/blocks remain fixed at the canonical RHF reference.
+Dynamic vertices/blocks of the selected method remain fixed at the canonical RHF reference.
 Solve Sigma = W[Q + L(Sigma)], where Q = contour(G0 M G0), and L is the
 occupied--virtual free-propagator response. No density trace rescaling is used.
 See docs/DYSON_ADC.md for equations, conventions and validation scope.
@@ -42,7 +42,7 @@ def _checked_solve(action, rhs, tol, max_cycle, label):
     # Actual equation residual, not just the iterative solver's status flag.
     if (info != 0 or not np.all(np.isfinite(solution)) or not np.isfinite(residual)
             or residual > tol*max(1., np.linalg.norm(rhs))):
-        raise ConvergenceError(f'ADC(3) {label} failed: info={info}, residual={residual:.3e}. '
+        raise ConvergenceError(f'DEM {label} failed: info={info}, residual={residual:.3e}. '
                                'Check the reference/gaps or increase static_max_cycle.')
     return solution, residual
 
@@ -57,7 +57,7 @@ def dynamic_density(ham, *, tol=1e-10, max_cycle=500):
     eps = ham.ints.energy[ham.simple]
     gap = eps[:no, None]-eps[None, no:]
     if np.any(gap >= -1e-10):
-        raise ValueError('ADC(3) requires occupied HF energies below virtual energies with a nonzero gap.')
+        raise ValueError('DEM requires occupied HF energies below virtual energies with a nonzero gap.')
     holes, particles = _triple_operator(ham, True), _triple_operator(ham, False)
     xp = np.zeros((no, ham.np))
     xh = np.zeros((ham.ns-no, ham.nh))
@@ -114,9 +114,9 @@ def dem_static(ham, *, tol=1e-10, max_cycle=500):
     check = sigma-coulomb_exchange(eri, q+response_density(sigma[:no, no:]/gap))
     residual = float(np.linalg.norm(check))
     if not np.all(np.isfinite(sigma)) or residual > tol*max(1., np.linalg.norm(sigma)):
-        raise ConvergenceError(f'ADC(3) static fixed-point residual {residual:.3e} exceeds tolerance.')
+        raise ConvergenceError(f'DEM static fixed-point residual {residual:.3e} exceeds tolerance.')
     if np.max(np.abs(sigma-sigma.T)) > tol:
-        raise ArithmeticError('ADC(3) static self-energy is not Hermitian.')
+        raise ArithmeticError('DEM static self-energy is not Hermitian.')
     return sigma, {
         'scheme': 'Schirmer-Angonoa DEM',
         'static_residual': residual,

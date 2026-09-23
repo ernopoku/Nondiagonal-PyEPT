@@ -14,8 +14,9 @@ def test_adc2_alias_is_existing_dyson_second_order(ints):
         np.testing.assert_array_equal(Hamiltonian(ints,name).dense(), Hamiltonian(ints,'ND2').dense())
 
 
-def test_dynamic_density_by_independent_complex_contour(ints):
-    h = Hamiltonian(ints, '3+')
+@pytest.mark.parametrize('method', ['3+', 'ND2'])
+def test_dynamic_density_by_independent_complex_contour(ints,method):
+    h = Hamiltonian(ints, method)
     full = h.dense()
     b = full[:h.ns, h.ns:]
     d = full[h.ns:, h.ns:]
@@ -36,8 +37,9 @@ def test_dynamic_density_by_independent_complex_contour(ints):
     np.testing.assert_allclose(q, integral, atol=2e-12)
 
 
-def test_static_response_against_full_spin_linear_system(ints):
-    h = Hamiltonian(ints, 'ADC(3)')
+@pytest.mark.parametrize('method,base', [('ADC(3)','3+'), ('ADC(2)-DEM','ND2')])
+def test_static_response_against_full_spin_linear_system(ints,method,base):
+    h = Hamiltonian(ints, method)
     q = h.static_diagnostics['dynamic_density']
     n = ints.n
     g = ints.g('p','p','p','p')
@@ -57,7 +59,7 @@ def test_static_response_against_full_spin_linear_system(ints):
     actual = h.a-np.diag(eps[h.simple])
     np.testing.assert_allclose(actual,expected[np.ix_(h.simple,h.simple)],atol=2e-12)
     np.testing.assert_allclose(coulomb_exchange(ints.spatial_eri,q),w(qspin)[::2,::2],atol=1e-13)
-    strict = Hamiltonian(ints,'3+')
+    strict = Hamiltonian(ints,base)
     np.testing.assert_array_equal(h.bh,strict.bh)
     np.testing.assert_array_equal(h.bp,strict.bp)
     np.testing.assert_array_equal(h.dense()[h.ns:,h.ns:],strict.dense()[h.ns:,h.ns:])
@@ -89,15 +91,16 @@ def test_static_is_correct_through_fourth_order_against_fci(ints):
     assert all(12 < differences[i]/differences[i+1] < 22 for i in range(2)), differences
 
 
-def test_noninteracting_limit_and_failed_resolvent(ints,monkeypatch):
+@pytest.mark.parametrize('method', ['ADC(3)', 'ADC(2)-DEM'])
+def test_noninteracting_limit_and_failed_resolvent(ints,monkeypatch,method):
     zero = replace(ints,spatial_eri=np.zeros_like(ints.spatial_eri))
-    h = Hamiltonian(zero,'ADC(3)')
+    h = Hamiltonian(zero,method)
     np.testing.assert_array_equal(h.a,np.diag(zero.energy[h.simple]))
     assert h.static_diagnostics['static_residual'] == 0
     import nondiagonal_ept.dyson_adc as module
     monkeypatch.setattr(module,'minres',lambda op,rhs,**kw:(np.zeros_like(rhs),0))
     with pytest.raises(ConvergenceError,match='resolvent'):
-        Hamiltonian(ints,'ADC(3)')
+        Hamiltonian(ints,method)
 
 
 @pytest.fixture(scope='module')
@@ -108,9 +111,10 @@ def mf():
 
 
 @pytest.mark.parametrize('sector,target', [('ip',4),('ea',5)])
-def test_molecular_dyson_adc_api(mf,sector,target):
+@pytest.mark.parametrize('method', ['ADC(3)', 'ADC(2)-DEM'])
+def test_molecular_dyson_adc_api(mf,sector,target,method):
     before = mf.mo_coeff.copy()
-    ep = EPT(mf,'ADC(3)',frozen=[0,6],sector=sector)
+    ep = EPT(mf,method,frozen=[0,6],sector=sector)
     p = ep.kernel([target])[0]
     dense = ep.dense_spectrum()
     q = min(dense,key=lambda q:abs(q.energy-p.energy))
@@ -123,7 +127,7 @@ def test_molecular_dyson_adc_api(mf,sector,target):
     np.testing.assert_allclose(z,p.strength,atol=1e-9)
     changed = mf.copy()
     changed.mo_coeff = mf.mo_coeff*np.array([-1,1,-1,1,-1,1,-1])
-    other = EPT(changed,'ADC(3)',frozen=[0,6],sector=sector,spin=1).kernel([target])[0]
+    other = EPT(changed,method,frozen=[0,6],sector=sector,spin=1).kernel([target])[0]
     np.testing.assert_allclose([p.energy,p.strength],[other.energy,other.strength],atol=1e-10)
     np.testing.assert_array_equal(mf.mo_coeff,before)
 
@@ -138,3 +142,28 @@ def test_methods_and_static_controls(mf):
     for options in ({'static_tol':0}, {'static_tol':float('nan')}, {'static_max_cycle':0}):
         with pytest.raises(ValueError): EPT(mf,'ADC(3)',**options)
     with pytest.raises(ValueError): run_methods(mf,['ADC(3)','ADC(3)-DEM'])
+
+
+def test_adc2_dem_leading_static_order_and_fixed_dynamic_blocks(ints):
+    # The second-order density gives the complete third-order static term.
+    from nondiagonal_ept.blocks import amplitudes, static_self_energy
+    errors, sizes = [], []
+    for scale in (.2, .1, .05):
+        scaled = replace(ints, spatial_eri=scale*ints.spatial_eri)
+        ham = Hamiltonian(scaled, 'ADC(2)-DEM')
+        t, singles = amplitudes(scaled)
+        third = static_self_energy(scaled,t,singles,'quadratic')[::2,::2]
+        sigma = ham.a-np.diag(scaled.energy[ham.simple])
+        errors.append(np.linalg.norm(sigma-third))
+        sizes.append(np.linalg.norm(sigma))
+    assert all(13 < errors[i]/errors[i+1] < 19 for i in range(2)), errors
+    assert all(7 < sizes[i]/sizes[i+1] < 9 for i in range(2)), sizes
+
+
+def test_adc2_dem_method_selection_and_controls(mf):
+    result = run_methods(mf,['ND2','ADC(2)-DEM','ADC(3)-DEM'],frozen=1,targets=[4])
+    assert list(result) == ['ND2','ADC(2)-DEM','ADC(3)']
+    assert abs(result['ND2'][0].energy-result['ADC(2)-DEM'][0].energy) > 1e-6
+    for options in ({'static_tol':0}, {'static_tol':float('nan')}, {'static_max_cycle':0}):
+        with pytest.raises(ValueError): EPT(mf,'ADC(2)-DEM',**options)
+    with pytest.raises(ConvergenceError): EPT(mf,'ADC(2)-DEM',static_max_cycle=1)

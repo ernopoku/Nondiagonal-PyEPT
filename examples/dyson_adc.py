@@ -11,7 +11,7 @@ mol = gto.M(
 )
 mf = scf.RHF(mol).run(conv_tol=1e-12)
 for sector, targets in [('ip', [4, 2]), ('ea', [5])]:
-    results = run_methods(mf, ['ADC(2)', 'ADC(3)', '3+'], frozen=1,
+    results = run_methods(mf, ['ADC(2)', 'ADC(2)-DEM', 'ADC(3)', '3+'], frozen=1,
                           sector=sector, targets=targets, tol=1e-9)
     for name, poles in results.items():
         label = 'ADC(2) / ND2' if name == 'ND2' else name

@@ -1,0 +1,12 @@
+{
+  "atom": "F 0.0000 0.0000 0.0000; H 0.0000 0.0000 0.9168",
+  "unit": "Angstrom",
+  "basis": "cc-pvdz",
+  "method": "ADC(2)-DEM",
+  "frozen": 1,
+  "sector": "ip",
+  "targets": [4, 2],
+  "tol": 1e-9,
+  "static_tol": 1e-10,
+  "static_max_cycle": 500
+}

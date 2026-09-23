@@ -1,4 +1,4 @@
-# Conventional Dyson ADC(2) and ADC(3)
+# Dyson ADC and DEM static extensions
 
 `EPT(mf, "ADC(2)")` computes the second-order Dyson self-energy, identical to
 `ND2`. `EPT(mf, "ADC(3)")` computes standard Dyson ADC(3) with the
@@ -8,6 +8,7 @@ It is not an alias for `3+` or for non-Dyson ADC(3).
 | Requested name | Formulation | Interface |
 |---|---|---|
 | `ADC(2)` / `ND2` | Second-order Dyson self-energy; zero static correlation term | `EPT` |
+| `ADC(2)-DEM` | Second-order dynamic self-energy with DEM static correction | `EPT` |
 | `ADC(3)` / `ADC(3)-DEM` | Third-order dynamic self-energy with DEM static correction | `EPT` |
 | `ADC(3)-strict` / `3+` | Same third-order dynamic blocks, strict third-order static correction | `EPT` |
 | `nD-ADC(3)` | Separate IP/EA non-Dyson ADC(3), using PySCF | `SectorEPT` |
@@ -192,3 +193,43 @@ large spatial integrals and triple tensors remain memory intensive.
   (2023), [doi:10.1063/5.0168779](https://doi.org/10.1063/5.0168779):
   dynamic-block conventions and the distinction between ND2, strict `3+`
   and standard Dyson ADC(3).
+
+## ADC(2)-DEM: second-order dynamics with a DEM static correction
+
+Use `EPT(mf, "ADC(2)-DEM", frozen=1, sector="ip")` to select this extension.
+It keeps **exactly the ND2 dynamic blocks**: first-order vertices B and
+zeroth-order diagonal 2hp/2ph energies D. It computes Q with those blocks and
+solves the same `Sigma = W[Q + L(Sigma)]` response equation as ADC(3)-DEM.
+The resulting static matrix is added to the entire simple-space block.
+HF orbitals and energies remain fixed; both IP and EA use the same Hamiltonian.
+
+```python
+results = run_methods(
+    mf, ["ND2", "ADC(2)-DEM", "ADC(3)-DEM"],
+    frozen=1, sector="ip", targets=[4, 2], tol=1e-9,
+)
+for method, poles in results.items():
+    for pole in poles:
+        print(method, pole.binding_energy_ev, "PS =", pole.strength)
+```
+
+The result key is `ADC(2)-DEM`. Plain `ADC(2)` still means conventional
+ADC(2)/ND2; existing calculations are unchanged. The DEM extension is generally
+different from ND2, though they coincide in the noninteracting limit.
+It is a specifically defined static extension, not a redefinition of
+conventional ADC(2), not a complete ADC(3), and not an orbital optimization.
+
+With fluctuation integrals scaled by lambda, Q is second order and W is
+first order. Thus the static correction starts at third order, with selected
+higher orders from the response solve. Its leading term matches the complete
+third-order static matrix used by `3+`; it lacks third-order dynamic terms
+and the complete fourth-order static correction of ADC(3)-DEM. More static
+terms do not by themselves guarantee better molecular accuracy.
+
+The same `static_tol`, `static_max_cycle`, residual diagnostics, PS and Dyson
+orbital interfaces apply. `examples/hf_adc2_dem.json` is a ready-to-run CLI
+input. Tests independently check the contour density, full spin-orbital
+response, leading perturbation order, unchanged dynamic blocks, IP/EA
+residues, phase/spin invariance, frozen MOs, and convergence failures.
+Molecular comparisons are internal checks; no independent external
+ADC(2)-DEM benchmark is claimed.

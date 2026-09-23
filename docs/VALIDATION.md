@@ -120,3 +120,18 @@ all triple resolvent residuals are below 9.98e-12. These are internal checks,
 not a comparison with an independent molecular ADC(3)-DEM program.
 See [definition and limits](DYSON_ADC.md) and
 [raw comparisons](dyson_adc_comparison.json).
+
+## ADC(2)-DEM extension
+
+The full suite now passes 94 tests. ADC(2)-DEM shares ND2 dynamic blocks and
+uses the DEM static-response equation. Added checks verify its independent
+contour density, spin-orbital response, third-order leading static term and
+fourth-order difference from the strict third-order static term. IP/EA
+molecular tests include residues, frozen MOs, spin/phase invariance and
+solver failures. The JSON CLI example also completed successfully.
+
+The updated `dyson_adc_comparison.json` contains 52 converged poles across
+four molecule/basis cases and four methods, including 13 ADC(2)-DEM poles.
+All pole residuals are below 1e-9 hartree. These are internal comparisons;
+there is no independent external ADC(2)-DEM benchmark or claim of improved
+physical accuracy. See [definition and usage](DYSON_ADC.md).
