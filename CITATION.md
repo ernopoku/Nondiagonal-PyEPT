@@ -50,3 +50,19 @@ defined in [SECTOR_ISR.md](docs/SECTOR_ISR.md). It is not a published
 non-Dyson NRL3 theory. The general canonical transformation is described by
 Bravyi, DiVincenzo and Loss, *Ann. Phys.* **326**, 2793 (2011),
 [doi:10.1016/j.aop.2011.06.004](https://doi.org/10.1016/j.aop.2011.06.004).
+
+
+## Conventional Dyson ADC(2) and ADC(3)
+
+For these methods also cite J. Schirmer, L. S. Cederbaum and O. Walter,
+*Phys. Rev. A* **28**, 1237 (1983),
+[doi:10.1103/PhysRevA.28.1237](https://doi.org/10.1103/PhysRevA.28.1237).
+For the `ADC(3)` DEM static correction, cite J. Schirmer and G. Angonoa,
+*J. Chem. Phys.* **91**, 1754 (1989),
+[doi:10.1063/1.457081](https://doi.org/10.1063/1.457081).
+The equivalent resolvent/linear equations and particle-number limitation are
+discussed by M. Deleuze, M. K. Scheller and L. S. Cederbaum,
+*J. Chem. Phys.* **103**, 3578 (1995),
+[doi:10.1063/1.470241](https://doi.org/10.1063/1.470241).
+Report the explicit static scheme: `ADC(3)-DEM` is distinct from `3+` and
+`nD-ADC(3)`. See [the definition](docs/DYSON_ADC.md).

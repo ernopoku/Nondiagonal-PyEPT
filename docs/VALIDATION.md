@@ -15,7 +15,7 @@ The automated tests cover:
 7. Davidson roots against full dense diagonalization for all seven HF-reference methods.
 8. Pole-strength sum rules, AO and MO Dyson normalization, alpha/beta equality, and orbital-phase invariance.
 9. Analytic self-energy derivatives and the residue derivative identity.
-10. Invalid references, frozen targets, ambiguous ADC names, and deliberately unconverged solver calls.
+10. Invalid references, frozen targets, invalid method names, and deliberately unconverged solver calls.
 11. Brueckner preparation, preservation of the caller's reference, matrix Hermiticity, and diagonal preconditioning.
 
 The final pytest output is saved in `test_results.txt`. Determinant-algebra tests include both two- and four-electron references; the oracle does not use the production einsum equations.
@@ -95,10 +95,28 @@ See [the dedicated validation and definition](NON_DYSON_NRL3.md) and [ten IP/EA 
 
 ## Separate-sector additions
 
-The complete suite now passes **70 tests**. See [SECTOR_ISR.md](SECTOR_ISR.md)
+The separate-sector addition brought the suite to **70 tests**. See [SECTOR_ISR.md](SECTOR_ISR.md)
 for direct-PySCF nD-ADC(3) checks and independent fourth-order remainder tests
 for the experimental NRL3 canonical reduction. Eighteen small-basis IP/EA
 roots for HF, water and N2 differ from parent NRL3 by at most 0.023585 eV with
 NRL3-ISR(3). Some roots are nearly dark satellites; root order does not identify
 orbital character. These are internal comparisons, not external validation
 of a newly derived many-electron method. Raw data: [sector_comparison.json](sector_comparison.json).
+
+
+## Conventional Dyson ADC(3) with DEM
+
+The complete suite now passes **83 tests**. New independent tests compare the
+DEM dynamic density with complex contour integration and the static response
+with a full spin-orbital linear system. Small-system FCI tests verify that the
+static self-energy is correct through fourth order; its difference from the
+strict `3+` static term starts at fourth order. Both IP and EA, frozen virtual
+orbitals, residue normalization and failure handling are checked.
+
+Thirty-nine molecular poles (ADC(2), `3+`, ADC(3)) for HF/cc-pVDZ,
+HF/cc-pVTZ, water/cc-pVDZ and N2/cc-pVDZ have residuals below 9.80e-10
+hartree. The largest DEM static-equation residual is below 9.81e-14 hartree;
+all triple resolvent residuals are below 9.98e-12. These are internal checks,
+not a comparison with an independent molecular ADC(3)-DEM program.
+See [definition and limits](DYSON_ADC.md) and
+[raw comparisons](dyson_adc_comparison.json).

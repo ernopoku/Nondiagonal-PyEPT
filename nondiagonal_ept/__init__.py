@@ -7,7 +7,8 @@ from .sector import SectorEPT, run_sector_methods, SECTOR_METHODS
 import numpy as np
 
 class EPT:
-    def __init__(self,mf,method='NRL3',*,frozen=0,sector='ip',spin=0,max_memory_mb=2000,brueckner_tol=1e-8):
+    def __init__(self,mf,method='NRL3',*,frozen=0,sector='ip',spin=0,max_memory_mb=2000,brueckner_tol=1e-8,
+                 static_tol=1e-10,static_max_cycle=500):
         spec=method_spec(method,sector)
         if spec.name.upper()=='BD-T1':
             from .brueckner import prepare
@@ -19,7 +20,8 @@ class EPT:
             self.hamiltonian=StaticNRL3(self.integrals,sector,spin)
         else:
             self.integrals=from_pyscf(mf,frozen,max_memory_mb)
-            self.hamiltonian=Hamiltonian(self.integrals,method,sector,spin)
+            self.hamiltonian=Hamiltonian(self.integrals,method,sector,spin,
+                                         static_tol=static_tol,static_max_cycle=static_max_cycle)
         self.method=self.hamiltonian.spec.name
         self.results=[]
 

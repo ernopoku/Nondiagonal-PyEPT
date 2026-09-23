@@ -14,6 +14,7 @@ class Method:
     triple_correction: bool = False
 
 METHODS = {
+    'ADC(3)': Method('ADC(3)','dem',1.,1.,1.,1.,True,True),
     'ND-NRL3': Method('nD-NRL3','linear',.5,.5,.5,.5,True,True),
     'BD-T1': Method('BD-T1','none',.5,.5,.5,.5,True,True,True),
     'ND2': Method('ND2'),
@@ -31,8 +32,8 @@ def method_spec(name, sector='ip'):
         raise ValueError('Use SectorEPT(...).kernel(nroots=...) for separate-sector methods.')
     if name=='ADC(2)':name='ND2'
     if name in ('ADC(3)-STRICT','STRICT-ADC(3)'): name='3+'
-    if name=='ADC(3)':
-        raise ValueError('ADC(3) is ambiguous. Use ADC(3)-strict for 3+; renormalized static ADC(3) is not implemented.')
+    if name in ('DYSON-ADC(2)', 'ADC(2)-DYSON'): name='ND2'
+    if name in ('DYSON-ADC(3)', 'ADC(3)-DYSON', 'ADC(3)-DEM'): name='ADC(3)'
     if name not in METHODS: raise ValueError(f'Unknown/unsupported method {name!r}; choose {list(METHODS)}.')
     if sector not in ('ip','ea'): raise ValueError("sector must be 'ip' or 'ea'.")
     m=METHODS[name]

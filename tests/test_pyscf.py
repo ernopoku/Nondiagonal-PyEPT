@@ -42,7 +42,7 @@ def test_mp2_conventions(mf):
 
 
 def test_guards(mf):
-    with pytest.raises(ValueError):EPT(mf,'ADC(3)')
+    with pytest.raises(ValueError):EPT(mf,'unknown-method')
     with pytest.raises(ValueError):EPT(mf,'ND2',frozen=5)
     with pytest.raises(ValueError):EPT(mf,'ND2',frozen=1).kernel([0])
     with pytest.raises(ConvergenceError):EPT(mf,'NRL3',frozen=1).kernel([4],max_cycle=1)

@@ -57,7 +57,8 @@ class Hamiltonian:
     Layout: simple alpha/beta creators; i<j,a (2hp); i,a<b (2ph).
     Triple tensors are unpacked antisymmetrically for contractions.
     """
-    def __init__(self,ints,method='NRL3',sector='ip',spin=0,*,doubles=None):
+    def __init__(self,ints,method='NRL3',sector='ip',spin=0,*,doubles=None,
+                 static_tol=1e-10,static_max_cycle=500):
         if spin not in (0,1):raise ValueError('spin must be 0 (alpha) or 1 (beta).')
         self.ints=ints;self.spec=method_spec(method,sector);self.sector=sector;self.spin=spin
         if self.spec.name == 'nD-NRL3':
@@ -88,7 +89,7 @@ class Hamiltonian:
         b+=wi[:,None,None,None]*c;d+=we[:,None,None,None]*f
         self.bh=b[(self.simple[:,None],)+tuple(self.ip.T)] if self.nh else np.zeros((self.ns,0))
         self.bp=d[(self.simple[:,None],)+tuple(self.ea.T)] if self.np else np.zeros((self.ns,0))
-        sigma=static_self_energy(ints,t,s,m.static)
+        sigma=static_self_energy(ints,t,s,'none' if m.static=='dem' else m.static)
         self.a=np.diag(ints.energy[self.simple])+sigma[np.ix_(self.simple,self.simple)]
         eo=ints.energy[:o];ev=ints.energy[o:]
         if m.triple_correction:
@@ -102,6 +103,11 @@ class Hamiltonian:
         self.gvoov=ints.g('v','o','v','o') if m.ip_interaction else None
         self.govov=ints.g('o','v','o','v') if m.ea_interaction else None
         self._diag=None
+        if m.static=='dem':
+            from .dyson_adc import dem_static
+            sigma,self.static_diagnostics=dem_static(self,tol=static_tol,
+                                                     max_cycle=static_max_cycle)
+            self.a+=sigma
 
     def unpack(self,h,p):
         o,v=self.ints.nocc,self.ints.nvir

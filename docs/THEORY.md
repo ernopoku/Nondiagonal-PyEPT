@@ -191,3 +191,13 @@ The production convergence condition is `||H C − ω C||₂ < tol`. A small cha
 ## Static opposite-sector extension
 
 The project-defined `nD-NRL3` approximation freezes and symmetrizes the opposite-sector NRL3 resolvent. Its complete definition and residue convention are in [NON_DYSON_NRL3.md](NON_DYSON_NRL3.md).
+
+
+## Conventional Dyson ADC additions
+
+`ADC(2)` is identical to `ND2`. Standard `ADC(3)` retains the full-weight
+second-order vertices and first-order triple blocks of `3+`, and replaces
+its strict third-order static term by the Schirmer–Angonoa DEM static
+self-energy. [DYSON_ADC.md](DYSON_ADC.md) defines the correlation-density
+resolvents and linear response equation, including all spin factors and
+validation. The `3+` implementation itself is unchanged.

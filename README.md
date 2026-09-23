@@ -13,19 +13,20 @@ The core uses a **matrix-free Hermitian Hamiltonian**, explicit antisymmetric sp
 
 | Name | Meaning |
 |---|---|
-| `ND2` | Non-diagonal second-order Dyson self-energy |
+| `ND2` / `ADC(2)` | Non-diagonal second-order Dyson self-energy |
 | `2ph-TDA` | Two-particle-one-hole Tamm–Dancoff approximation |
 | `NR2` | Non-diagonal renormalized second order |
 | `NRP3` | Non-diagonal renormalized partial third order |
 | `NRQ3` | Non-diagonal renormalized quasiparticle third order |
 | `nD-NRL3` | Static opposite-sector extension of NRL3; [definition and validation](docs/NON_DYSON_NRL3.md) |
 | `NRL3` | Non-diagonal renormalized linear third order |
+| `ADC(3)` | Conventional Dyson ADC(3) with Schirmer–Angonoa DEM static self-energy |
 | `3+`| Third-order plus |
 | `BD-T1` | Brueckner-doubles reference with terms linear in doubles and triple operators |
 
 `sector="ea"` applies the particle–hole counterpart of the asymmetric NR2/NRP3/NRQ3 truncations. ND2, 2ph-TDA, NRL3, 3+, and BD-T1 have the same Hamiltonian for IP and EA. Merely changing the sign of an IP does not implement an EA-specific NRQ3 calculation.
 
-**Reference scope:** real, molecular, closed-shell RHF; BD-T1 automatically constructs a semicanonical Brueckner reference with PySCF BCCD. UHF, ROHF, DFT, density-fitted SCF references, complex/spinor orbitals, periodic systems and gradients are not implemented. Established non-Dyson ADC(3) is available through `SectorEPT` (PySCF >= 2.14); see below. The static `nD-NRL3` extension is supported; it is distinct from non-Dyson ADC. The generic name `ADC(3)` is deliberately rejected: use `ADC(3)-strict`. Fourth-order/renormalized-static ADC(3) variants and the articles' diagonal-only methods are outside this implementation.
+**Reference scope:** real, molecular, closed-shell RHF; BD-T1 automatically constructs a semicanonical Brueckner reference with PySCF BCCD. UHF, ROHF, DFT, density-fitted SCF references, complex/spinor orbitals, periodic systems and gradients are not implemented. Established non-Dyson ADC(3) is available through `SectorEPT` (PySCF >= 2.14); see below. The static `nD-NRL3` extension is supported; it is distinct from non-Dyson ADC. `ADC(3)` selects conventional Dyson ADC(3) with the DEM static correction; `ADC(3)-strict` continues to select `3+`. Full ADC(4), other static variants, and the articles' diagonal-only methods are outside this implementation.
 
 ## Install and run
 
@@ -177,3 +178,23 @@ static `nD-NRL3` extension. No large-basis speedup is claimed.
 Read the [derivation, API, PS conventions and validation](docs/SECTOR_ISR.md)
 or the [step-by-step Wiki guide](https://github.com/ernopoku/Nondiagonal-PyEPT/wiki/Separate-Sector-Methods).
 Run `python examples/sector_methods.py` for a small working example.
+
+
+## Conventional Dyson ADC
+
+```python
+results = run_methods(mf, ["ADC(2)", "ADC(3)", "3+"],
+                      frozen=1, sector="ip", targets=[4, 2])
+```
+
+`ADC(2)` is the existing `ND2` method (its result key remains `ND2`).
+`ADC(3)` now includes the Schirmer–Angonoa Dyson-expansion static self-energy,
+correct through fourth order with selected higher-order contributions. The
+dynamic blocks retain third-order ADC accuracy. This differs from both the
+strict static `3+` method and `SectorEPT(mf, "nD-ADC(3)")`.
+
+Use `static_tol=1e-10` and `static_max_cycle=500` to control the static solves;
+`kernel` controls remain separate. All solves are residual checked. See
+[working equations, examples and validation](docs/DYSON_ADC.md),
+[the Wiki guide](https://github.com/ernopoku/Nondiagonal-PyEPT/wiki/Dyson-ADC),
+and `examples/dyson_adc.py`. The JSON CLI also accepts these methods.
