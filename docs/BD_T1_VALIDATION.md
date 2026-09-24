@@ -1,6 +1,6 @@
 # BD-T1 fixed-core validation and correction
 
-The supplied N2 reference uses a 1.1136 Angstrom bond, spherical cc-pVDZ,
+The N2 reference uses a 1.1136 Angstrom bond, spherical cc-pVDZ,
 two frozen occupied spatial orbitals, and unchanged RHF core orbitals throughout
 Brueckner optimization. Python targets [6, 4, 3] correspond to the reference's
 one-based active indices [5, 3, 2].
