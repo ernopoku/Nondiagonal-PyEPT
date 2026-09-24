@@ -1,4 +1,4 @@
-"""Compare archived reference poles; prints a machine-readable validation report.
+"""Compare reference poles; prints a validation report.
 
 python examples/validate_reference.py --molecules HF H2O N2 --output report.json
 The molecular geometries, spherical cc-pVTZ basis, and frozen cores match the
