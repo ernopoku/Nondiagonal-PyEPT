@@ -8,7 +8,7 @@
     "scf_energy": -100.057973641,
     "energy": -0.5777188111,
     "strength": 0.9263663312,
-    "source": "rp3_tz.log",
+    
     "reference_active_mo": 4,
     "python_energy": -0.5777173798575621,
     "python_strength": 0.9269710325280192,
@@ -28,7 +28,7 @@
     "scf_energy": -100.057973641,
     "energy": -0.7221896801,
     "strength": 0.9349506543,
-    "source": "rp3_tz.log",
+    
     "reference_active_mo": 2,
     "python_energy": -0.7221898086168537,
     "python_strength": 0.9349517955110874,
@@ -48,7 +48,7 @@
     "scf_energy": -100.057973641,
     "energy": -0.5812049612,
     "strength": 0.9261243978,
-    "source": "rq3_tz.log",
+    
     "reference_active_mo": 4,
     "python_energy": -0.5812033918888968,
     "python_strength": 0.9267818543218397,
@@ -68,7 +68,7 @@
     "scf_energy": -100.057973641,
     "energy": -0.7254905784,
     "strength": 0.934749387,
-    "source": "rq3_tz.log",
+    
     "reference_active_mo": 2,
     "python_energy": -0.7254906889486916,
     "python_strength": 0.9347557343668248,
@@ -88,7 +88,7 @@
     "scf_energy": -100.057973641,
     "energy": -0.5813190971,
     "strength": 0.9262909689,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 4,
     "python_energy": -0.5813185403021737,
     "python_strength": 0.9270064469153803,
@@ -108,7 +108,7 @@
     "scf_energy": -100.057973641,
     "energy": -0.7261389746,
     "strength": 0.9344965038,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 2,
     "python_energy": -0.7261391165352582,
     "python_strength": 0.9345756950101026,
@@ -128,7 +128,7 @@
     "scf_energy": -100.057973641,
     "energy": 0.1275254089,
     "strength": 0.9854284857,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 5,
     "python_energy": 0.12752549058298257,
     "python_strength": 0.9853558021623899,
@@ -148,7 +148,7 @@
     "scf_energy": -100.057973641,
     "energy": 0.1273125033,
     "strength": 0.9854514444,
-    "source": "rp3ea_tz.log",
+    
     "reference_active_mo": 5,
     "python_energy": 0.1273123530421072,
     "python_strength": 0.9854508053817626,
@@ -168,7 +168,7 @@
     "scf_energy": -100.057973641,
     "energy": 0.1273192965,
     "strength": 0.9854158127,
-    "source": "rq3ea_tz.log",
+   
     "reference_active_mo": 5,
     "python_energy": 0.12731914913366138,
     "python_strength": 0.9854147539558761,
@@ -188,7 +188,7 @@
     "scf_energy": -76.0568452682,
     "energy": -0.4528472998,
     "strength": 0.9177385612,
-    "source": "rp3_tz.log",
+    
     "reference_active_mo": 4,
     "python_energy": -0.4528474233940165,
     "python_strength": 0.9177363229375909,
@@ -208,7 +208,7 @@
     "scf_energy": -76.0568452682,
     "energy": -0.5357850649,
     "strength": 0.9204618716,
-    "source": "rp3_tz.log",
+    
     "reference_active_mo": 3,
     "python_energy": -0.5357851690278563,
     "python_strength": 0.9203760807061883,
@@ -228,7 +228,7 @@
     "scf_energy": -76.0568452682,
     "energy": -0.684045279,
     "strength": 0.9311859136,
-    "source": "rp3_tz.log",
+    
     "reference_active_mo": 2,
     "python_energy": -0.6840455280227022,
     "python_strength": 0.9310059156782334,
@@ -248,7 +248,7 @@
     "scf_energy": -76.0568452682,
     "energy": -0.452594657,
     "strength": 0.917906564,
-    "source": "rq3_tz.log",
+    
     "reference_active_mo": 4,
     "python_energy": -0.4525947718339767,
     "python_strength": 0.9179043575761977,
@@ -268,7 +268,7 @@
     "scf_energy": -76.0568452682,
     "energy": -0.5359105374,
     "strength": 0.9205428851,
-    "source": "rq3_tz.log",
+    
     "reference_active_mo": 3,
     "python_energy": -0.5359106331760581,
     "python_strength": 0.9204573394893841,
@@ -288,7 +288,7 @@
     "scf_energy": -76.0568452682,
     "energy": -0.684449346,
     "strength": 0.9311475716,
-    "source": "rq3_tz.log",
+    
     "reference_active_mo": 2,
     "python_energy": -0.6844495887308155,
     "python_strength": 0.930966315927061,
@@ -308,7 +308,7 @@
     "scf_energy": -76.0568452682,
     "energy": -0.453658643,
     "strength": 0.9168277402,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 4,
     "python_energy": -0.45365804392331777,
     "python_strength": 0.9177534402752624,
@@ -328,7 +328,7 @@
     "scf_energy": -76.0568452682,
     "energy": -0.5381424623,
     "strength": 0.9382258096,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 3,
     "python_energy": -0.5374795284532738,
     "python_strength": 0.9199418852446557,
@@ -348,7 +348,7 @@
     "scf_energy": -76.0568452682,
     "energy": -0.6861136455,
     "strength": 0.9304621924,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 2,
     "python_energy": -0.6861137920088209,
     "python_strength": 0.9303834012909316,
@@ -368,7 +368,7 @@
     "scf_energy": -76.0568452682,
     "energy": 0.1203043301,
     "strength": 0.9775731621,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 5,
     "python_energy": 0.12030405441809779,
     "python_strength": 0.9775844080257502,
@@ -388,7 +388,7 @@
     "scf_energy": -76.0568452682,
     "energy": 0.1197732955,
     "strength": 0.9779082974,
-    "source": "rp3ea_tz.log",
+    
     "reference_active_mo": 5,
     "python_energy": 0.11977298305058925,
     "python_strength": 0.9778957658692938,
@@ -408,7 +408,7 @@
     "scf_energy": -76.0568452682,
     "energy": 0.119758648,
     "strength": 0.9778935982,
-    "source": "rq3ea_tz.log",
+   
     "reference_active_mo": 5,
     "python_energy": 0.11975833763250654,
     "python_strength": 0.9778804837858444,
@@ -428,7 +428,7 @@
     "scf_energy": -108.979669435,
     "energy": -0.6293440195,
     "strength": 0.9136420835,
-    "source": "rp3_tz.log",
+    
     "reference_active_mo": 5,
     "python_energy": -0.6293434445184527,
     "python_strength": 0.9132611539850942,
@@ -448,7 +448,7 @@
     "scf_energy": -108.979669435,
     "energy": -0.5740915596,
     "strength": 0.8899512076,
-    "source": "rp3_tz.log",
+    
     "reference_active_mo": 3,
     "python_energy": -0.5740913317536749,
     "python_strength": 0.8896240591844958,
@@ -468,7 +468,7 @@
     "scf_energy": -108.979669435,
     "energy": -0.6864828881,
     "strength": 0.7944976092,
-    "source": "rp3_tz.log",
+    
     "reference_active_mo": 2,
     "python_energy": -0.6864827903850399,
     "python_strength": 0.7942721293997718,
@@ -488,7 +488,7 @@
     "scf_energy": -108.979669435,
     "energy": -0.6227908885,
     "strength": 0.9139150791,
-    "source": "rq3_tz.log",
+    
     "reference_active_mo": 5,
     "python_energy": -0.6227903540857582,
     "python_strength": 0.913546447208069,
@@ -508,7 +508,7 @@
     "scf_energy": -108.979669435,
     "energy": -0.5647812226,
     "strength": 0.8919417105,
-    "source": "rq3_tz.log",
+    
     "reference_active_mo": 3,
     "python_energy": -0.5647810301137888,
     "python_strength": 0.8916515475913819,
@@ -528,7 +528,7 @@
     "scf_energy": -108.979669435,
     "energy": -0.6795321263,
     "strength": 0.8006813933,
-    "source": "rq3_tz.log",
+    
     "reference_active_mo": 2,
     "python_energy": -0.6795322312848349,
     "python_strength": 0.8007390084221898,
@@ -548,7 +548,7 @@
     "scf_energy": -108.979669435,
     "energy": -0.6188114795,
     "strength": 0.9164317977,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 5,
     "python_energy": -0.6188101214105768,
     "python_strength": 0.9161113495987546,
@@ -568,7 +568,7 @@
     "scf_energy": -108.979669435,
     "energy": -0.5658575507,
     "strength": 0.8911693642,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 3,
     "python_energy": -0.5658575266650581,
     "python_strength": 0.891291853039016,
@@ -588,7 +588,7 @@
     "scf_energy": -108.979669435,
     "energy": -0.6858683991,
     "strength": 0.7914621883,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 2,
     "python_energy": -0.6836542529784746,
     "python_strength": 0.7954495756045605,
@@ -608,7 +608,7 @@
     "scf_energy": -108.979669435,
     "energy": 0.1131013534,
     "strength": 0.9116546003,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 6,
     "python_energy": 0.11310122258493793,
     "python_strength": 0.9116759007881209,
@@ -628,7 +628,7 @@
     "scf_energy": -108.979669435,
     "energy": 0.3934522362,
     "strength": 0.9644651212,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 8,
     "python_energy": 0.393451751347516,
     "python_strength": 0.9644800193149431,
@@ -648,7 +648,7 @@
     "scf_energy": -108.979669435,
     "energy": 0.1081623547,
     "strength": 0.9132206558,
-    "source": "rp3ea_tz.log",
+    
     "reference_active_mo": 6,
     "python_energy": 0.10816188375537017,
     "python_strength": 0.9122051537405842,
@@ -668,7 +668,7 @@
     "scf_energy": -108.979669435,
     "energy": 0.1141777792,
     "strength": 0.9134926815,
-    "source": "rq3ea_tz.log",
+   
     "reference_active_mo": 6,
     "python_energy": 0.11417728698874674,
     "python_strength": 0.9124224126132209,
@@ -688,7 +688,7 @@
     "scf_energy": -198.752850211,
     "energy": -0.5596414652,
     "strength": 0.8781635121,
-    "source": "rp3_tz.log",
+    
     "reference_active_mo": 7,
     "python_energy": -0.5596417758830761,
     "python_strength": 0.8781657276197559,
@@ -708,7 +708,7 @@
     "scf_energy": -198.752850211,
     "energy": -0.7681707633,
     "strength": 0.8540508545,
-    "source": "rp3_tz.log",
+    
     "reference_active_mo": 5,
     "python_energy": -0.7681711246590051,
     "python_strength": 0.8543028314671365,
@@ -728,7 +728,7 @@
     "scf_energy": -198.752850211,
     "energy": -0.6711744961,
     "strength": 0.8043761635,
-    "source": "rp3_tz.log",
+    
     "reference_active_mo": 4,
     "python_energy": -0.6711746940089425,
     "python_strength": 0.8044025143106318,
@@ -748,7 +748,7 @@
     "scf_energy": -198.752850211,
     "energy": -0.5589337401,
     "strength": 0.8784040017,
-    "source": "rq3_tz.log",
+    
     "reference_active_mo": 7,
     "python_energy": -0.5589340401056182,
     "python_strength": 0.8784060986514837,
@@ -768,7 +768,7 @@
     "scf_energy": -198.752850211,
     "energy": -0.7692156573,
     "strength": 0.8599320545,
-    "source": "rq3_tz.log",
+    
     "reference_active_mo": 5,
     "python_energy": -0.7692160245461848,
     "python_strength": 0.8601938219131879,
@@ -788,7 +788,7 @@
     "scf_energy": -198.752850211,
     "energy": -0.6708928395,
     "strength": 0.8049156988,
-    "source": "rq3_tz.log",
+    
     "reference_active_mo": 4,
     "python_energy": -0.670893029166697,
     "python_strength": 0.804941569074943,
@@ -808,7 +808,7 @@
     "scf_energy": -198.752850211,
     "energy": -0.5585044485,
     "strength": 0.8802160465,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 7,
     "python_energy": -0.5584973472571226,
     "python_strength": 0.8787649599967104,
@@ -828,7 +828,7 @@
     "scf_energy": -198.752850211,
     "energy": -0.7699346825,
     "strength": 0.8588490705,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 5,
     "python_energy": -0.7699351182272665,
     "python_strength": 0.859306702915882,
@@ -848,7 +848,7 @@
     "scf_energy": -198.752850211,
     "energy": -0.6720978292,
     "strength": 0.8040961499,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 4,
     "python_energy": -0.6720980185008791,
     "python_strength": 0.8041565898307517,
@@ -868,7 +868,7 @@
     "scf_energy": -198.752850211,
     "energy": 0.0305310068,
     "strength": 0.8926721564,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 8,
     "python_energy": 0.030530817309682767,
     "python_strength": 0.8925886524705902,
@@ -888,7 +888,7 @@
     "scf_energy": -198.752850211,
     "energy": 0.0267218887,
     "strength": 0.9016396124,
-    "source": "rp3ea_tz.log",
+    
     "reference_active_mo": 8,
     "python_energy": 0.026721568386059102,
     "python_strength": 0.9015700293128065,
@@ -908,7 +908,7 @@
     "scf_energy": -198.752850211,
     "energy": 0.0242593721,
     "strength": 0.9016644065,
-    "source": "rq3ea_tz.log",
+   
     "reference_active_mo": 8,
     "python_energy": 0.024259064339225533,
     "python_strength": 0.9015971261276611,
@@ -928,7 +928,7 @@
     "scf_energy": -112.779096592,
     "energy": -0.516199681,
     "strength": 0.9137097372,
-    "source": "rp3_tz.log",
+    
     "reference_active_mo": 5,
     "python_energy": -0.5162355767788238,
     "python_strength": 0.886120180986391,
@@ -948,7 +948,7 @@
     "scf_energy": -112.779096592,
     "energy": -0.6210800406,
     "strength": 0.9404070878,
-    "source": "rp3_tz.log",
+    
     "reference_active_mo": 4,
     "python_energy": -0.6186947408036096,
     "python_strength": 0.8909580838866545,
@@ -968,7 +968,7 @@
     "scf_energy": -112.779096592,
     "energy": -0.7127058456,
     "strength": 0.8018945516,
-    "source": "rp3_tz.log",
+    
     "reference_active_mo": 2,
     "python_energy": -0.7127063580684303,
     "python_strength": 0.8021693599374435,
@@ -988,7 +988,7 @@
     "scf_energy": -112.779096592,
     "energy": -0.5060715657,
     "strength": 0.8884482689,
-    "source": "rq3_tz.log",
+    
     "reference_active_mo": 5,
     "python_energy": -0.5060713986447255,
     "python_strength": 0.8886066902997111,
@@ -1008,7 +1008,7 @@
     "scf_energy": -112.779096592,
     "energy": -0.6240965037,
     "strength": 0.9409358847,
-    "source": "rq3_tz.log",
+    
     "reference_active_mo": 4,
     "python_energy": -0.621605311895046,
     "python_strength": 0.8901187979663175,
@@ -1028,7 +1028,7 @@
     "scf_energy": -112.779096592,
     "energy": -0.7185198222,
     "strength": 0.7969961962,
-    "source": "rq3_tz.log",
+    
     "reference_active_mo": 2,
     "python_energy": -0.7185204174259896,
     "python_strength": 0.7972003344096829,
@@ -1048,7 +1048,7 @@
     "scf_energy": -112.779096592,
     "energy": -0.5121361339,
     "strength": 0.8823823253,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 5,
     "python_energy": -0.5121360204500331,
     "python_strength": 0.8825145007138506,
@@ -1068,7 +1068,7 @@
     "scf_energy": -112.779096592,
     "energy": -0.6188083175,
     "strength": 0.892577953,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 4,
     "python_energy": -0.618808330072744,
     "python_strength": 0.8924363847617539,
@@ -1088,7 +1088,7 @@
     "scf_energy": -112.779096592,
     "energy": -0.7190255112,
     "strength": 0.792632268,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 2,
     "python_energy": -0.7190254902599367,
     "python_strength": 0.792713539965274,
@@ -1108,7 +1108,7 @@
     "scf_energy": -112.779096592,
     "energy": 0.0966825974,
     "strength": 0.9224835206,
-    "source": "rl3_tz.log",
+    
     "reference_active_mo": 6,
     "python_energy": 0.09668247547949171,
     "python_strength": 0.9218496400265922,
@@ -1128,7 +1128,7 @@
     "scf_energy": -112.779096592,
     "energy": 0.0927713952,
     "strength": 0.9225304804,
-    "source": "rp3ea_tz.log",
+    
     "reference_active_mo": 6,
     "python_energy": 0.09277130744673023,
     "python_strength": 0.9224434699375842,
@@ -1148,7 +1148,7 @@
     "scf_energy": -112.779096592,
     "energy": 0.0970585319,
     "strength": 0.9226774654,
-    "source": "rq3ea_tz.log",
+   
     "reference_active_mo": 6,
     "python_energy": 0.09705844623425541,
     "python_strength": 0.9225913400984382,
