@@ -1,4 +1,4 @@
-"""Reproduce legacy H0-preconditioned Davidson iterations without early exit.
+"""Reproduce H0-preconditioned Davidson iterations without early exit.
 
 Diagnostic only: energy-change convergence is intentionally NOT used to return
 scientific results. Use EPT.kernel() for residual-controlled results.
