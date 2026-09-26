@@ -152,7 +152,7 @@ Printed examples label pole strength as **PS**. The Python attribute `pole.stren
 
 ## Static non-Dyson NRL3
 
-Use `EPT(mf, "nD-NRL3", frozen=1, sector="ip")` or include `"nD-NRL3"` in `run_methods`. For IP, 2ph contributions are frozen at HF orbital energies and symmetrized; for EA, 2hp contributions are frozen instead. See [equations, PS interpretation, examples, and validation limits](docs/NON_DYSON_NRL3.md).
+Use `EPT(mf, "nD-NRL3", frozen=1, sector="ip")` or include `"nD-NRL3"` in `run_methods`. For IP, 2ph contributions are frozen at HF orbital energies and symmetrized; for EA, 2hp contributions are frozen instead. See [equations, PS interpretation, examples, and validation limits](docs/NON_DYSON_NRL3.md). The static setup now uses preconditioned, spin-blocked contractions with reusable integral layouts; [timings and controls](docs/NON_DYSON_PERFORMANCE.md) explain the improvement and its limits.
 
 
 ## Separate IP/EA intermediate-state representations

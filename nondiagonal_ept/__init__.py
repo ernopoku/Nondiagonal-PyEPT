@@ -8,16 +8,22 @@ import numpy as np
 
 class EPT:
     def __init__(self,mf,method='NRL3',*,frozen=0,sector='ip',spin=0,max_memory_mb=2000,brueckner_tol=1e-8,
-                 static_tol=1e-10,static_max_cycle=500):
+                 static_tol=1e-10,static_max_cycle=None):
         spec=method_spec(method,sector)
+        if static_max_cycle is None:
+            static_max_cycle = 5000 if spec.name == 'nD-NRL3' else 500
         if spec.name.upper()=='BD-T1':
             from .brueckner import prepare
             self.integrals,t,self.brueckner=prepare(mf,frozen,max_memory_mb,brueckner_tol)
             self.hamiltonian=Hamiltonian(self.integrals,method,sector,spin,doubles=t)
         elif spec.name == 'nD-NRL3':
             from .non_dyson import StaticNRL3
+            from pyscf.lib import logger
             self.integrals=from_pyscf(mf,frozen,max_memory_mb)
-            self.hamiltonian=StaticNRL3(self.integrals,sector,spin)
+            self.hamiltonian=StaticNRL3(self.integrals,sector,spin,
+                                           static_tol=static_tol,
+                                           static_max_cycle=static_max_cycle,
+                                           max_memory_mb=max_memory_mb, _log=logger.new_logger(mf))
         else:
             self.integrals=from_pyscf(mf,frozen,max_memory_mb)
             self.hamiltonian=Hamiltonian(self.integrals,method,sector,spin,

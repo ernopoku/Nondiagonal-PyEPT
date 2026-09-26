@@ -39,7 +39,7 @@ orbital-specific fitted energies or empirical parameters are introduced.
 The static resolvent includes the fully renormalized opposite triple block,
 not just its zeroth-order diagonal.
 
-Each static solve uses MINRES and checks the actual linear-system residual,
+Each static solve uses diagonally preconditioned MINRES and checks the actual linear-system residual,
 with residual refinement if needed. Failure raises ConvergenceError. A near
 opposite-sector pole can make the chosen static approximation ill-conditioned;
 small solver residuals alone do not establish physical reliability in that case.
@@ -73,6 +73,63 @@ For attachment use `sector="ea"` and suitable virtual targets (for this example,
 before freezing. The JSON CLI accepts `"method": "nD-NRL3"` with its existing
 single-method input schema. The same RHF reference restrictions apply as for NRL3.
 
+## Static setup controls and progress
+
+The optimized implementation applies only the eliminated sector. It packs the
+nonzero spin blocks of the 2ph contractions once and reuses BLAS-ready symmetric and antisymmetric
+virtual-pair kernels. The latter cache is capped at the smaller of 1024 MB and
+10% of `max_memory_mb`; larger tensors use streamed slabs instead. No dense
+auxiliary Hamiltonian or spin-orbital four-virtual tensor is constructed.
+The cache cap is additional-workspace management, not a hard operating-system
+memory limit; the existing AO-to-MO memory estimate still applies.
+
+The preconditioner is positive definite even for an indefinite shifted system:
+
+```
+gap = abs(eps_p - diagonal(D_opp))
+floor = max(1e-8, 0.01 * max(gap))
+M_inverse = 1 / maximum(gap, floor)
+```
+
+The floor regularizes only the **preconditioner**, not the self-energy denominator.
+Periodic checks also stop MINRES once the actual residual meets the requested
+threshold. This is especially important for tiny residual-refinement right-hand
+sides, which the old fixed relative stopping rule could oversolve severely.
+The final acceptance and residual-refinement checks use the original unpacked
+parent operator, so even roundoff differences from pair compression are checked
+and, if necessary, corrected. Every solution must satisfy:
+`norm((eps_p I - D_opp) x - B_opp[p]) <= static_tol * max(1, norm(B_opp[p]))`.
+Thus the optimization retains the same method, static matrix definition, and
+residue normalization. A successful solver status with an inadequate residual
+still raises an error. Conversely, reaching an iteration limit does not invalidate
+a solution whose explicitly checked residual already meets the requested tolerance.
+
+```python
+mf.verbose = 4  # show per-orbital static setup progress
+calculation = EPT(
+    mf, "nD-NRL3", frozen=1, sector="ip",
+    max_memory_mb=16000,
+    static_tol=1e-10,
+    static_max_cycle=5000,
+)
+poles = calculation.kernel(targets=[4, 2], tol=1e-9)
+print(calculation.hamiltonian.static_diagnostics)
+```
+
+`static_tol` controls the shifted linear-system residuals; `kernel(tol=...)`
+controls the final pole eigenpair residuals. `static_max_cycle` is the maximum
+MINRES iteration count **per pass**; up to two residual-refinement passes are
+allowed. Its nD-NRL3 default is 5000, independent of auxiliary dimension, replacing
+the old dimension-dependent limit. Other methods keep their previous 500-cycle
+default. Both controls also work through `run_methods` and JSON input.
+Diagnostics include per-orbital iteration counts and residuals, total opposite-
+block products, static setup/solve times, and ladder-cache bytes. With `verbose=0`,
+setup remains quiet. Difficult near-pole shifts can still be expensive or fail;
+a smaller final secular matrix does not guarantee a faster end-to-end calculation
+than NRL3 when only a few poles are requested.
+
+See [timings, validation, and reproduction commands](NON_DYSON_PERFORMANCE.md).
+
 ## PS, Dyson orbitals, and derivatives
 
 PS and Dyson coefficients are the residues of this **static approximate
@@ -90,7 +147,7 @@ is not a proof of a separate N-electron removal/addition sum rule.
 
 ## Checks and molecular comparisons
 
-The suite passes **55 tests** after this addition. New checks cover explicit
+The original addition passed 55 tests; the optimized implementation and its additional checks are described in [the performance report](NON_DYSON_PERFORMANCE.md). New checks cover explicit
 dense inversion of the opposite block for both sectors, off-diagonal
 symmetrization, the diagonal freezing limit, reduced dimensions, Hermiticity,
 analytic derivatives, the noninteracting limit, actual static-solve failures,

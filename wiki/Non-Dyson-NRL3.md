@@ -47,7 +47,7 @@ PS and `dyson_ao` are residues of this static approximate propagator. The frozen
 
 ## Validation and limitations
 
-All 55 tests pass, including independent dense inverses, Hermiticity, dimension checks, analytic derivatives, solver-failure checks, spin equality, Dyson normalization, and the weak-coupling limit. Ten cc-pVDZ roots for HF, H2O, and N2 differ from NRL3 by 0.003715–0.142144 eV in absolute binding energy. The largest difference is the N2 target-6 IP. All nD-NRL3 eigenpair residuals are below 8.59e-10 Ha. The N2 IP secular dimension falls from 4016 to 761.
+The original validation included independent dense inverses, Hermiticity, dimension checks, analytic derivatives, solver-failure checks, spin equality, Dyson normalization, and the weak-coupling limit. Ten cc-pVDZ roots for HF, H2O, and N2 differ from NRL3 by 0.003715–0.142144 eV in absolute binding energy. The largest difference is the N2 target-6 IP. All nD-NRL3 eigenpair residuals are below 8.59e-10 Ha. The N2 IP secular dimension falls from 4016 to 761.
 
 There is no external benchmark implementation for this extension. These are internal consistency checks and comparisons, not a claim of published-method validation. Near degeneracies, strong mixing, or opposite-sector resonances can cause larger changes. Small-basis attachment results are not basis-converged physical EA predictions.
 
@@ -59,3 +59,17 @@ pytest -q
 ```
 
 [[Home]] | [[Methods and Theory|Methods-and-Theory]] | [[Visualizing Dyson Orbitals|Visualizing-Dyson-Orbitals]]
+
+## Faster static setup
+
+The optimized static solver uses preconditioned MINRES, evaluates only the needed
+auxiliary sector, reuses packed nonzero spin and virtual-pair contractions, and stops residual refinement as soon
+as the actual required residual is satisfied. The nD-NRL3
+defaults are `static_tol=1e-10` and `static_max_cycle=5000` (per solve/refinement
+pass). Set `mf.verbose = 4` before constructing `EPT` to see per-orbital progress.
+`calculation.hamiltonian.static_diagnostics` records iterations, residuals,
+operator products, cache size, and timing. The equations and PS normalization
+are unchanged. Large or near-resonant static solves can still cost more than an
+NRL3 calculation requesting only a few poles.
+
+See the [performance report and benchmark script](https://github.com/ernopoku/Nondiagonal-PyEPT/blob/main/docs/NON_DYSON_PERFORMANCE.md).
