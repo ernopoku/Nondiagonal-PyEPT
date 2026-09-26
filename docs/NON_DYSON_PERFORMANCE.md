@@ -1,5 +1,7 @@
 # nD-NRL3 performance and numerical equivalence
 
+**Historical report:** these measurements concern `full-space-v1`. The default is now the sector-projected version 2; see the [current method guide](NON_DYSON_NRL3.md) and [new validation](NON_DYSON_SECTOR_VALIDATION.md).
+
 The static opposite-sector construction is unchanged. This update accelerates its linear solves and contractions; it does not substitute a diagonal opposite-sector resolvent or remove virtual simple orbitals.
 
 ## Why the original implementation was slow

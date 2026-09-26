@@ -1,194 +1,105 @@
-# Static non-Dyson extension of NRL3
+# Sector-projected static nD-NRL3 (version 2)
 
-**Known basis-set limitation:** HF IP benchmarks show differences from NRL3 up to 0.60 eV with cc-pVTZ and 2.78 eV with aug-cc-pVTZ, despite converged residuals. The occupied–virtual static sampling is implicated. Double-zeta agreement does not establish general reliability. See the [basis-set investigation](NON_DYSON_BASIS_AUDIT.md) before using this exploratory approximation for quantitative predictions.
+`EPT(mf, "nD-NRL3", ...)` now uses **sector-projected-v2** by default. This is an explicit revision of the original static extension, not a numerical retuning. IP keeps active occupied simple orbitals and 2hp configurations; EA keeps active virtual simple orbitals and 2ph configurations. The other triple sector contributes a static correction sampled only at the retained simple-orbital energies.
 
-Invoke this implementation as **`nD-NRL3`**. It is the static opposite-sector
-extension selected for this project. It is not a separately derived IP/EA ADC
-intermediate-state representation, and it is not a new published benchmarked
-method. The existing Dyson `NRL3` implementation is unchanged.
+The original full-simple-space construction can be reproduced with `static_space="full"`. Its basis-set sensitivity is documented in the [legacy investigation](NON_DYSON_BASIS_AUDIT.md). Earlier numerical tables and manuscript dimensions for that formulation do not describe version 2. The existing Dyson NRL3 method is unchanged.
 
-## Definition
+## Working equations
 
-Write the NRL3 self-energy as
+Write the parent NRL3 matrix, in a fixed spin sector, as
 
-\[
-\Sigma(E)=\Sigma_\infty+B^- (EI-D^-)^{-1}(B^-)^T
-                         +B^+ (EI-D^+)^{-1}(B^+)^T.
-\]
+$$
+H=\begin{pmatrix}A&B^-&B^+\\(B^-)^T&D^-&0\\(B^+)^T&0&D^+\end{pmatrix},
+\qquad A=F+\Sigma_\infty.
+$$
 
-The coupling matrices retain NRL3's half-weight linear corrections and the
-triple blocks retain their first-order interactions. Let
-`S_opp(E) = B_opp (E I - D_opp)^(-1) B_opp.T` and let eps_p be the canonical
-HF orbital energy of simple orbital p. Freeze the opposite-sector contribution as
+The vertices retain NRL3's half-weight linear corrections, and the triple blocks retain their first-order interactions. Let P select active occupied simple orbitals for IP, or active virtual simple orbitals for EA. R labels the retained triple sector (2hp for IP; 2ph for EA), and O labels the opposite triple sector. Define
 
-\[
-K_{pq}=\tfrac12\{[S_{opp}(\epsilon_p)]_{pq}
-                        +[S_{opp}(\epsilon_q)]_{pq}\}.
-\]
+$$
+S_O(E)=B_O(EI-D_O)^{-1}B_O^T,
+\qquad K_{pq}=\tfrac12\left([S_O(\epsilon_p)]_{pq}+[S_O(\epsilon_q)]_{pq}\right),\quad p,q\in P.
+$$
 
-For IP, the opposite sector is **2ph**; for EA, it is **2hp**. K is real symmetric.
-Its diagonal is exactly S_opp(eps_p)[p,p], recovering the frozen-at-own-HF-energy
-prescription on the diagonal. The static block is A_nd = A_NRL3 + K. The
-remaining iterative Hamiltonian is
+The version-2 secular matrix is
 
-\[
-H_{nd}=\begin{pmatrix} A_{nd}&B_{ret}\\B_{ret}^T&D_{ret}\end{pmatrix}.
-\]
+$$
+H_{\mathrm{nD},P}=\begin{pmatrix}
+ A_{PP}+K_{PP}&B_{P,R}\\B_{P,R}^T&D_R
+\end{pmatrix}.
+$$
 
-All active simple occupied and virtual orbitals of the selected spin remain.
-Only the opposite triple manifold is removed from the secular problem. No
-orbital-specific fitted energies or empirical parameters are introduced.
-The static resolvent includes the fully renormalized opposite triple block,
-not just its zeroth-order diagonal.
+Implementation solves `(eps_p I - D_O) x_p = B_O[p,:].T` for each p in P and symmetrizes the resulting rows. No fitted shifts, denominator damping, adjustable energy cutoff, or molecule-specific branch is used. Occupation defines P; the sign of an orbital energy does not.
 
-Each static solve uses diagonally preconditioned MINRES and checks the actual linear-system residual,
-with residual refinement if needed. Failure raises ConvergenceError. A near
-opposite-sector pole can make the chosen static approximation ill-conditioned;
-small solver residuals alone do not establish physical reliability in that case.
-The opposite blocks are needed during construction but not during the subsequent
-Davidson iterations. Setup can therefore remain costly. No general speedup or
-peak-memory reduction is claimed.
+The matrix is the principal submatrix of the legacy static Hamiltonian on P plus the retained triple configurations. In particular, **K_PP is unchanged**. Version 2 removes the opposite-occupation simple orbitals; it does not clamp their energies or try to repair their large matrix elements. This also removes the virtual-energy sampling from IP static construction and occupied-energy sampling from EA static construction.
 
-## Usage
+The entire active virtual basis still enters the integrals and triple configurations of an IP calculation. This is a projection of the simple-operator sector, not a frozen-virtual-orbital approximation. Frozen-core settings retain their original meaning.
 
-```python
-from pyscf import gto, scf
-from nondiagonal_ept import EPT, run_methods
+At zeroth order this projection has a useful separation property. With highest active occupied energy epsilon_H, lowest active virtual energy epsilon_L, and a positive gap Delta = epsilon_L - epsilon_H,
 
-mol = gto.M(atom="""
-F  0.0000  0.0000  0.0000
-H  0.0000  0.0000  0.9168
-""", unit="Angstrom", basis="cc-pvdz", verbose=0)
-mf = scf.RHF(mol).run(conv_tol=1e-12)
+$$
+D^{+(0)}_{ia b}-\epsilon_p\ge 2\Delta\quad(p\ \mathrm{occupied}),
+\qquad
+\epsilon_p-D^{-(0)}_{ij a}\ge 2\Delta\quad(p\ \mathrm{virtual}).
+$$
 
-calculation = EPT(mf, "nD-NRL3", frozen=1, sector="ip")
-for pole in calculation.kernel(targets=[4, 2], tol=1e-9):
-    print(f"MO {pole.target}: IP = {pole.binding_energy_ev:.6f} eV, "
-          f"PS = {pole.strength:.6f}, residual = {pole.residual:.2e}")
+This follows from D+(0) = epsilon_a + epsilon_b - epsilon_i and D-(0) = epsilon_i + epsilon_j - epsilon_a. Thus the retained sampling energies lie on the appropriate side of the zeroth-order opposite-sector spectrum. The legacy full space did not have this property for its wrong-occupation rows. First-order interactions in D can still shift its spectrum; the inequality is not a guarantee for a strongly correlated, fully interacting resolvent.
 
-results = run_methods(mf, ["NRL3", "nD-NRL3"], frozen=1,
-                      sector="ip", targets=[4, 2], tol=1e-9)
-```
+## Perturbative justification and limits
 
-For attachment use `sector="ea"` and suitable virtual targets (for this example,
-`targets=[5]`). Targets retain the original zero-based spatial-MO indexing,
-before freezing. The JSON CLI accepts `"method": "nD-NRL3"` with its existing
-single-method input schema. The same RHF reference restrictions apply as for NRL3.
+For a canonical RHF reference with a finite occupied-virtual gap, scale the fluctuation potential by lambda. A selected-sector quasiparticle has a leading simple amplitude of order one, retained triple amplitudes of order lambda, and opposite-occupation simple amplitudes of order lambda squared: the simple-simple correlation coupling starts at second order, and the two-step path through triples also starts at second order. Their contribution to a nondegenerate target energy therefore starts at fourth order.
 
-## Static setup controls and progress
+Also, replacing S_O(E) by S_O(eps_p) on the target diagonal changes the energy first at fourth order: the leading self-energy derivative is second order and E-eps_p is second order. Thus projection and freezing preserve the parent NRL3 target-energy expansion through third order under these assumptions. Independent weak-coupling tests verify fourth-order leading differences for both IP and EA.
 
-The optimized implementation applies only the eliminated sector. It packs the
-nonzero spin blocks of the 2ph contractions once and reuses BLAS-ready symmetric and antisymmetric
-virtual-pair kernels. The latter cache is capped at the smaller of 1024 MB and
-10% of `max_memory_mb`; larger tensors use streamed slabs instead. No dense
-auxiliary Hamiltonian or spin-orbital four-virtual tensor is constructed.
-The cache cap is additional-workspace management, not a hard operating-system
-memory limit; the existing AO-to-MO memory estimate still applies.
+This is an order argument about **energies**, not a claim that the full transition amplitudes, PS, or all matrix elements match NRL3 through third order. It is not an exact Schur-complement elimination of the removed simple space. That exact elimination would introduce additional energy-dependent blocks. Strong mixing, a closing gap, or a genuine opposite-sector resonance can invalidate the small-parameter argument.
 
-The preconditioner is positive definite even for an indefinite shifted system:
+This project-defined static construction is also distinct from the separately derived non-Dyson ADC intermediate-state representation. For that established approach use `SectorEPT(..., "nD-ADC(3)")`; see the [non-Dyson ADC literature](https://arxiv.org/abs/1910.07116). That literature is not a derivation or validation of this NRL3 extension.
 
-```
-gap = abs(eps_p - diagonal(D_opp))
-floor = max(1e-8, 0.01 * max(gap))
-M_inverse = 1 / maximum(gap, floor)
-```
-
-The floor regularizes only the **preconditioner**, not the self-energy denominator.
-Periodic checks also stop MINRES once the actual residual meets the requested
-threshold. This is especially important for tiny residual-refinement right-hand
-sides, which the old fixed relative stopping rule could oversolve severely.
-The final acceptance and residual-refinement checks use the original unpacked
-parent operator, so even roundoff differences from pair compression are checked
-and, if necessary, corrected. Every solution must satisfy:
-`norm((eps_p I - D_opp) x - B_opp[p]) <= static_tol * max(1, norm(B_opp[p]))`.
-Thus the optimization retains the same method, static matrix definition, and
-residue normalization. A successful solver status with an inadequate residual
-still raises an error. Conversely, reaching an iteration limit does not invalidate
-a solution whose explicitly checked residual already meets the requested tolerance.
+## Use and compatibility
 
 ```python
-mf.verbose = 4  # show per-orbital static setup progress
+from nondiagonal_ept import EPT
+
+mf.verbose = 4
 calculation = EPT(
     mf, "nD-NRL3", frozen=1, sector="ip",
     max_memory_mb=16000,
+    static_space="sector",  # new default, explicitly shown for reproducibility
     static_tol=1e-10,
     static_max_cycle=5000,
 )
-poles = calculation.kernel(targets=[4, 2], tol=1e-9)
+for pole in calculation.kernel(targets=[4, 3, 2], tol=1e-9):
+    print(pole.target, pole.binding_energy_ev, pole.strength)  # PS
 print(calculation.hamiltonian.static_diagnostics)
 ```
 
-`static_tol` controls the shifted linear-system residuals; `kernel(tol=...)`
-controls the final pole eigenpair residuals. `static_max_cycle` is the maximum
-MINRES iteration count **per pass**; up to two residual-refinement passes are
-allowed. Its nD-NRL3 default is 5000, independent of auxiliary dimension, replacing
-the old dimension-dependent limit. Other methods keep their previous 500-cycle
-default. Both controls also work through `run_methods` and JSON input.
-Diagnostics include per-orbital iteration counts and residuals, total opposite-
-block products, static setup/solve times, and ladder-cache bytes. With `verbose=0`,
-setup remains quiet. Difficult near-pole shifts can still be expensive or fail;
-a smaller final secular matrix does not guarantee a faster end-to-end calculation
-than NRL3 when only a few poles are requested.
+Existing calls automatically use version 2 after updating the installation. Original zero-based MO indices are preserved. An IP target must be an active occupied orbital; an EA target must be an active virtual orbital. Frozen or wrong-sector targets raise an error.
 
-See [timings, validation, and reproduction commands](NON_DYSON_PERFORMANCE.md).
+`run_methods` and JSON input also accept `static_space`. Only nD-NRL3 supports a nondefault value. To reproduce the original approximation explicitly:
 
-## PS, Dyson orbitals, and derivatives
-
-PS and Dyson coefficients are the residues of this **static approximate
-propagator**. They use the simple components of its normalized eigenvectors,
-just as in the existing API. Thus `dyson_ao.T @ S @ dyson_ao == strength`, and
-the existing cube-file visualization instructions apply.
-
-The frozen K has zero energy derivative. `self_energy(E, derivative=True)`
-therefore includes only the retained triple sector. PS values will generally
-differ from full Dyson NRL3; no extra multiplicative correction is imposed.
-These residues should not be identified with the separately derived transition
-moments of non-Dyson ADC. The full simple space is retained, so the total spectral
-weight over every reduced-Hamiltonian root is its simple-space dimension. This
-is not a proof of a separate N-electron removal/addition sum rule.
-
-## Checks and molecular comparisons
-
-The original addition passed 55 tests; the optimized implementation and its additional checks are described in [the performance report](NON_DYSON_PERFORMANCE.md). New checks cover explicit
-dense inversion of the opposite block for both sectors, off-diagonal
-symmetrization, the diagonal freezing limit, reduced dimensions, Hermiticity,
-analytic derivatives, the noninteracting limit, actual static-solve failures,
-Davidson versus dense spectra, spin equality, PS and AO normalization, and
-multi-method API operation. A nondegenerate weak-coupling check finds the
-NRL3/nD-NRL3 energy difference decreases approximately 16-fold when the
-fluctuation potential is halved, consistent with a fourth-order leading
-change in that test. This does not establish exact third-order agreement with
-full CI for NRL3 itself.
-
-Ten IP/EA roots of HF, H2O, and N2 were compared at cc-pVDZ. The absolute
-binding-energy differences from NRL3 range from **0.003715 to 0.142144 eV**.
-The largest is the N2 target-6 IP. PS changes are also recorded; closeness of
-energies does not imply identical intensities. All nD-NRL3 eigenpair residuals
-are below 8.59e-10 Ha; static-solve residuals are below 9.45e-11 in these runs.
-For N2, the matrix dimension falls from 4016 to 761 for IP and 3281 for EA.
-
-These are reproducible internal consistency checks and comparisons, **not an
-external validation of a published nD-NRL3 implementation**. The attachment
-examples in this small basis should not be interpreted as converged predictions
-of physical electron affinities. Diffuse basis convergence and broader benchmarks
-remain to be studied. Near degeneracies, strong mixing, or opposite-sector
-resonances can produce larger differences from NRL3.
-
-Reproduce the comparisons with:
-
-```bash
-python examples/compare_non_dyson.py > comparison.json
-pytest -q
+```python
+legacy = EPT(mf, "nD-NRL3", frozen=1, sector="ip", static_space="full")
 ```
 
-[Recorded molecular data](non_dyson_comparison.json)
+Diagnostics identify `formulation` (`sector-projected-v2` or `full-space-v1`), `static_space`, sampled original MO indices and energies, iteration counts, checked residuals, products, cache bytes, and timings. Progress output includes the formulation name. Save this metadata alongside results when comparing versions.
 
-## Sources and scope of the extension
+## Numerical controls and performance
 
-The diagonal non-Dyson prescription is described in Opoku, Pawlowski, and Ortiz,
-J. Chem. Phys. 155, 204107 (2021), around Eq. (27),
-[doi:10.1063/5.0070849](https://doi.org/10.1063/5.0070849). The NRL3 block definitions
-come from J. Chem. Phys. 159, 124109 (2023),
-[doi:10.1063/5.0168779](https://doi.org/10.1063/5.0168779). The symmetrized
-non-diagonal static extension above is the explicit project definition; it is
-not attributed to those articles as a published equation.
+`static_tol` controls the actual shifted-system residual; the default acceptance is
+
+`norm((eps_p I - D_O) x_p - B_O[p,:]) <= 1e-10 * max(1, norm(B_O[p,:]))`.
+
+Final acceptance is checked with the original uncompressed parent operator. Interactions in the unused, uncoupled triple sector on zero input are skipped during this check; the checked sector is unchanged. Positive-definite diagonal preconditioning, packed spin contractions, normalized virtual-pair kernels, and residual refinement remain enabled. `static_max_cycle` is a per-pass limit, with up to two refinement passes; it does not change the approximation. `kernel(tol=...)` independently controls the final eigenpair residual.
+
+The ladder cache is capped at the smaller of 1024 MB and 10% of `max_memory_mb`; larger contractions use streamed slabs. The memory option is a working budget and integral-size check, not a hard process memory cap. No dense opposite-sector inverse is stored.
+
+Only occupied shifts are needed for IP and only virtual shifts for EA. IP benefits particularly strongly because it no longer solves the high-energy virtual shifted systems. EA may still require many shifts. Integral transformations and vertex construction still involve the full active orbital space. Reuse one EPT object for all requested targets.
+
+## PS, Dyson orbitals, and validation
+
+`pole.strength` (printed as **PS**) is the squared norm of the retained simple component of a normalized eigenvector. `dyson_mo` retains the full active spatial-MO array shape, with zeros in the removed simple sector. `dyson_ao` is its AO expansion and satisfies `C.T @ S_AO @ C = PS`. These amplitudes belong to the projected approximate propagator; they are not the parent NRL3 amplitudes or separately corrected ADC transition moments.
+
+`calculation.self_energy(E)` now returns a matrix in the retained simple space. Its row/column original-MO labels are in `static_diagnostics["original_mos"]`; do not index it directly by an original MO number.
+
+Summing PS over the complete reduced spectrum gives the number of retained simple orbitals in the selected spin sector. This algebraic identity does not establish exact correlated IP/EA spectral sum rules.
+
+See the [version-2 basis validation](NON_DYSON_SECTOR_VALIDATION.md) for molecular comparisons, residuals, PS, basis coverage, and failures if any. These comparisons use NRL3 as the parent approximation; agreement with it is not an experimental or exact-energy accuracy claim. No finite test set guarantees reliability for every molecule, basis, or strongly correlated reference.

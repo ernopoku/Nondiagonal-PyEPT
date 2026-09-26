@@ -1,5 +1,6 @@
-"""Static opposite-sector extension of NRL3 (not a separate ADC ISR)."""
+"""Sector-projected static NRL3 extension (not a separately derived ADC ISR)."""
 from dataclasses import replace
+from copy import copy
 from time import perf_counter
 import numpy as np
 from scipy.sparse.linalg import LinearOperator, minres
@@ -16,20 +17,35 @@ class _ResidualConverged(Exception):
 class StaticNRL3(Hamiltonian):
     """Freeze S_opp[p,q] as (S_opp(eps_p)[p,q]+S_opp(eps_q)[p,q])/2.
 
-    Retain the full simple-orbital space and one triple manifold. The opposite
-    manifold contributes to A once during construction, not during Davidson.
+    Retain sector-appropriate simple orbitals and one triple manifold. The
+    opposite manifold contributes to A once, not during Davidson. Explicit
+    static_space="full" reproduces the original full-simple-space extension.
     """
     def __init__(self, ints, sector='ip', spin=0, *, static_tol=1e-10,
-                 static_max_cycle=5000, max_memory_mb=2000, _log=None):
+                 static_max_cycle=5000, max_memory_mb=2000, static_space="sector", _log=None):
         if not np.isfinite(static_tol) or static_tol <= 0:
             raise ValueError('static_tol must be finite and positive.')
         if not isinstance(static_max_cycle, (int, np.integer)) or static_max_cycle < 1:
             raise ValueError('static_max_cycle must be a positive integer.')
         if not np.isfinite(max_memory_mb) or max_memory_mb <= 0:
             raise ValueError('max_memory_mb must be finite and positive.')
+        if static_space not in ('sector', 'full'):
+            raise ValueError("static_space must be 'sector' or 'full'.")
         started = perf_counter()
         super().__init__(ints, 'NRL3', sector, spin)
         ip_sector = sector == 'ip'
+        self.static_space = static_space
+        if static_space == 'sector':
+            # Project ONLY the simple block: IP keeps occupied creators and
+            # EA keeps virtual creators. The retained triple block is unchanged.
+            keep = self.simple < ints.nocc
+            if not ip_sector:
+                keep = ~keep
+            self.simple = self.simple[keep]
+            self.a = self.a[np.ix_(keep, keep)].copy()
+            self.bh = self.bh[keep].copy()
+            self.bp = self.bp[keep].copy()
+            self.ns = len(self.simple)
         opposite = self.bp if ip_sector else self.bh
         dimension = self.np if ip_sector else self.nh
         eps = ints.energy[self.simple]
@@ -38,24 +54,36 @@ class StaticNRL3(Hamiltonian):
         opposite_action, diagonal, cache_bytes = _opposite_operator(
             self, ip_sector, max_memory_mb)
         self.static_diagnostics = dict(solver='preconditioned MINRES',
+                                       static_space=static_space,
+                                       formulation=('sector-projected-v2' if static_space == 'sector'
+                                                    else 'full-space-v1'),
+                                       sampling_energies_hartree=eps.tolist(),
+                                       original_mos=ints.original_mos[ints.spatial[self.simple]].tolist(),
                                        iterations=[], matvecs=0, reference_matvecs=0,
                                        ladder_cache_bytes=int(cache_bytes))
         self.static_solve_iterations = np.zeros(self.ns, dtype=int)
 
         zero_h, zero_p = np.zeros(self.nh), np.zeros(self.np)
+        # Certify with the uncompressed parent contractions, but omit the
+        # unused sector's interactions on an identically zero input. The NRL3
+        # triple blocks have no cross-sector coupling. A shallow view preserves
+        # all original integrals and avoids mutating this Hamiltonian.
+        reference = copy(self)
+        reference.spec = replace(self.spec, ip_interaction=not ip_sector,
+                                 ea_interaction=ip_sector)
         def reference_action(vector):
             self.static_diagnostics['matvecs'] += 1
             self.static_diagnostics['reference_matvecs'] += 1
-            h, p = (self.triple_action(zero_h, vector) if ip_sector
-                    else self.triple_action(vector, zero_p))
+            h, p = (reference.triple_action(zero_h, vector) if ip_sector
+                    else reference.triple_action(vector, zero_p))
             return p if ip_sector else h
 
         solutions = np.zeros_like(opposite)
         self.static_solve_residuals = np.zeros(self.ns)
         solve_started = perf_counter()
         if _log is not None:
-            _log.info('nD-NRL3: constructing static correction (%d orbital shifts, dimension %d)',
-                      self.ns, dimension)
+            _log.info('nD-NRL3 [%s]: constructing static correction (%d orbital shifts, dimension %d)',
+                      self.static_diagnostics['formulation'], self.ns, dimension)
         for row, energy in enumerate(eps):
             rhs = opposite[row]
             if dimension == 0 or np.linalg.norm(rhs) == 0:

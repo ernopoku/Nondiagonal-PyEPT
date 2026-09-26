@@ -190,7 +190,7 @@ The production convergence condition is `||H C − ω C||₂ < tol`. A small cha
 
 ## Static opposite-sector extension
 
-The project-defined `nD-NRL3` approximation freezes and symmetrizes the opposite-sector NRL3 resolvent. Its complete definition and residue convention are in [NON_DYSON_NRL3.md](NON_DYSON_NRL3.md).
+The project-defined `nD-NRL3` approximation now defaults to sector-projected version 2: occupied simple orbitals for IP, virtual simple orbitals for EA, and the corresponding retained triple sector. It freezes and symmetrizes the opposite-sector NRL3 resolvent only on that simple space. `static_space="full"` reproduces the legacy version. The full equations, energy-order argument, and residue convention are in [NON_DYSON_NRL3.md](NON_DYSON_NRL3.md).
 
 
 ## Conventional Dyson ADC additions

@@ -18,7 +18,7 @@ for basis in ['cc-pvdz','aug-cc-pvdz','cc-pvtz','aug-cc-pvtz']:
  mf=scf.RHF(mol);mf.conv_tol=1e-12;mf.kernel()
  nr=EPT(mf,'NRL3',frozen=1,sector='ip',max_memory_mb=16000)
  poles=nr.kernel(targets=[4,2],tol=1e-10)
- h=StaticNRL3(nr.integrals,static_tol=1e-11,max_memory_mb=16000)
+ h=StaticNRL3(nr.integrals,static_tol=1e-11,max_memory_mb=16000,static_space="full")
  ns=h.ns;no=nr.integrals.nocc//2
  def getp(ham,target):
   idx=int(np.flatnonzero(nr.integrals.original_mos==target)[0])

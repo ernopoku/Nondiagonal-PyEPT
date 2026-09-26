@@ -19,5 +19,6 @@ for molecule,atom,frozen,ip,ea in cases:
                 non_dyson_ev=b.binding_energy_ev,difference_ev=b.binding_energy_ev-a.binding_energy_ev,
                 dyson_PS=a.strength,non_dyson_PS=b.strength,residual=b.residual,
                 dimensions={m:e.hamiltonian.shape[0] for m,e in methods.items()},
+                formulation=methods['nD-NRL3'].hamiltonian.static_diagnostics['formulation'],
                 static_solve_residual=max(methods['nD-NRL3'].hamiltonian.static_solve_residuals)))
 print(json.dumps(report,indent=2))

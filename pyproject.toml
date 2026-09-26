@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 [project]
 name = "nondiagonal-pyept"
-version = "0.1.0"
+version = "0.2.0"
 description = "Non-diagonal electron propagator Hamiltonians with a PySCF interface"
 license = {file = "LICENSE"}
 readme = "README.md"

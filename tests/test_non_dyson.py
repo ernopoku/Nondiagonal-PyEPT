@@ -9,29 +9,32 @@ from nondiagonal_ept.solver import self_energy
 
 
 @pytest.mark.parametrize('sector', ['ip', 'ea'])
-def test_static_resolvent_and_retained_spectrum(ints, sector):
+@pytest.mark.parametrize('space', ['sector', 'full'])
+def test_static_resolvent_and_retained_spectrum(ints, sector, space):
     parent = Hamiltonian(ints, 'NRL3', sector)
     full = parent.dense()
-    nd = StaticNRL3(ints, sector)
+    nd = StaticNRL3(ints, sector, static_space=space)
     simple = np.arange(parent.ns)
+    if space == "sector":
+        simple = simple[(parent.simple < ints.nocc) if sector == "ip" else (parent.simple >= ints.nocc)]
     holes = np.arange(parent.ns, parent.ns+parent.nh)
     particles = np.arange(parent.ns+parent.nh, parent.shape[0])
     retained, eliminated = (holes, particles) if sector == 'ip' else (particles, holes)
     b = full[np.ix_(simple, eliminated)]
     d = full[np.ix_(eliminated, eliminated)]
-    eps = ints.energy[parent.simple]
+    eps = ints.energy[parent.simple[simple]]
     row_values = np.array([b[p]@np.linalg.solve(e*np.eye(len(d))-d,b.T)
                            for p,e in enumerate(eps)])
     static = (row_values+row_values.T)/2
     keep = np.r_[simple, retained]
     expected = full[np.ix_(keep,keep)].copy()
-    expected[:parent.ns,:parent.ns] += static
+    expected[:nd.ns,:nd.ns] += static
     actual = nd.dense()
     np.testing.assert_allclose(nd.static_opposite, static, atol=1e-12)
     np.testing.assert_allclose(actual, expected, atol=1e-12)
     np.testing.assert_allclose(actual, actual.T, atol=1e-13)
     np.testing.assert_allclose(nd.diagonal(), np.diag(actual), atol=1e-13)
-    assert nd.shape[0] == parent.shape[0]-len(eliminated)
+    assert nd.shape[0] == len(simple)+len(retained)
     # Each diagonal exactly reproduces the frozen-at-own-HF-energy prescription.
     for p,e in enumerate(eps):
         np.testing.assert_allclose(static[p,p],b[p]@np.linalg.solve(e*np.eye(len(d))-d,b[p]),atol=1e-13)
@@ -88,7 +91,7 @@ def test_weak_coupling_difference_starts_at_fourth_order(sector,index):
         scaled=replace(ints,spatial_eri=scale*z)
         dyson=Hamiltonian(scaled,'NRL3',sector)
         nd=StaticNRL3(scaled,sector)
-        errors.append(abs(davidson(dyson,index,tol=1e-13)[0]-davidson(nd,index,tol=1e-13)[0]))
+        errors.append(abs(davidson(dyson,index,tol=1e-13)[0]-davidson(nd,index if sector == 'ip' else index-2,tol=1e-13)[0]))
     # Fourth-order leading changes decrease by approximately 16 on halving V.
     assert all(12 < errors[i]/errors[i+1] < 22 for i in range(2))
 
@@ -131,7 +134,8 @@ def test_static_iteration_limit_with_good_residual_is_accepted(ints, monkeypatch
 
 
 @pytest.mark.parametrize('options', [dict(static_tol=0), dict(static_tol=float('nan')),
-                                     dict(static_max_cycle=0), dict(static_max_cycle=1.5)])
+                                     dict(static_max_cycle=0), dict(static_max_cycle=1.5),
+                                     dict(static_space='unknown')])
 def test_static_invalid_controls(ints, options):
     with pytest.raises(ValueError):
         StaticNRL3(ints, **options)
@@ -153,7 +157,7 @@ def test_indefinite_shift_uses_unchanged_resolvent(ints):
     assert np.max(np.linalg.eigvalsh(eps[-1]*np.eye(len(d))-d)) > 0
     raw = np.array([np.linalg.solve(e*np.eye(len(d))-d,b[p])@b.T
                     for p,e in enumerate(eps)])
-    nd = StaticNRL3(modified)
+    nd = StaticNRL3(modified, static_space='full')
     np.testing.assert_allclose(nd.static_opposite, (raw+raw.T)/2, atol=1e-11, rtol=1e-10)
 
 
@@ -211,3 +215,82 @@ def test_compressed_action_roundoff_is_checked_against_parent(ints, monkeypatch)
     np.testing.assert_allclose(nd.static_opposite,expected,atol=1e-11,rtol=1e-10)
     assert max(nd.static_solve_residuals) <= 1e-10
     assert nd.static_diagnostics['reference_matvecs'] > nd.ns
+
+
+@pytest.mark.parametrize('sector', ['ip', 'ea'])
+@pytest.mark.parametrize('spin', [0, 1])
+def test_sector_projection_matches_legacy_principal_submatrix(ints, sector, spin):
+    legacy = StaticNRL3(ints, sector, spin, static_space='full')
+    fixed = StaticNRL3(ints, sector, spin)
+    selected = np.flatnonzero((legacy.simple < ints.nocc) if sector == 'ip'
+                              else (legacy.simple >= ints.nocc))
+    keep = np.r_[selected, np.arange(legacy.ns, legacy.shape[0])]
+    np.testing.assert_allclose(fixed.dense(), legacy.dense()[np.ix_(keep,keep)], atol=1e-12)
+    assert fixed.ns == (ints.nocc//2 if sector == 'ip' else ints.nvir//2)
+    assert fixed.static_diagnostics['formulation'] == 'sector-projected-v2'
+    assert legacy.static_diagnostics['formulation'] == 'full-space-v1'
+    np.testing.assert_array_equal(fixed.simple, legacy.simple[selected])
+    np.testing.assert_array_equal(fixed.static_diagnostics['sampling_energies_hartree'],
+                                  ints.energy[fixed.simple])
+
+
+def test_sector_target_mapping_and_legacy_option():
+    from pyscf import gto, scf
+    from nondiagonal_ept import EPT
+    mf=scf.RHF(gto.M(atom='O 0 0 0; H 0 -.7586 .5043; H 0 .7586 .5043',
+                    basis='sto-3g', verbose=0)).run(conv_tol=1e-12)
+    for sector,target,wrong in [('ip',4,5),('ea',5,4)]:
+        calc=EPT(mf,'nD-NRL3',sector=sector,frozen=[0,6])
+        p=calc.kernel([target])[0]
+        assert p.target == target
+        occupied = mf.mo_occ[calc.integrals.original_mos] > 0
+        forbidden = ~occupied if sector == 'ip' else occupied
+        np.testing.assert_array_equal(p.dyson_mo[forbidden], 0.)
+        with pytest.raises(ValueError,match='simple space'):
+            calc.kernel([wrong])
+        assert calc.hamiltonian.static_diagnostics['original_mos'] == ([1,2,3,4] if sector == 'ip' else [5])
+        old=EPT(mf,'nD-NRL3',sector=sector,frozen=[0,6],static_space='full')
+        assert old.hamiltonian.ns == 5
+    with pytest.raises(ValueError,match='only supported'):
+        EPT(mf,'NRL3',static_space='full')
+
+
+@pytest.mark.parametrize('sector', ['ip', 'ea'])
+def test_uniform_energy_origin_shift(ints, sector):
+    # Orbital occupation, not the sign of an orbital energy, defines the sector.
+    original=StaticNRL3(ints,sector)
+    shifted=StaticNRL3(replace(ints,energy=ints.energy+7.0),sector)
+    np.testing.assert_allclose(shifted.static_opposite,original.static_opposite,atol=1e-12)
+    np.testing.assert_allclose(shifted.dense(),original.dense()+7*np.eye(original.shape[0]),atol=1e-12)
+
+
+def test_hf_triple_zeta_basis_regression():
+    # Reproduces the reported large-basis failure through the public API.
+    # Includes both members of the degenerate pi pair, as in the user's input.
+    from pyscf import gto, scf
+    from nondiagonal_ept import EPT
+    mf=scf.RHF(gto.M(atom='F 0 0 0; H 0 0 .9168', basis='cc-pvtz',
+                    verbose=0)).run(conv_tol=1e-12)
+    parent=EPT(mf,'NRL3',frozen=1)
+    fixed=EPT(mf,'nD-NRL3',frozen=1)
+    targets=[4,3,2]
+    a=parent.kernel(targets)
+    b=fixed.kernel(targets)
+    assert fixed.hamiltonian.ns == 4
+    assert len(fixed.hamiltonian.static_diagnostics['iterations']) == 4
+    for p,q in zip(a,b):
+        assert abs(p.binding_energy_ev-q.binding_energy_ev) < .08
+        assert q.residual < 1e-9
+    np.testing.assert_allclose(b[0].energy,b[1].energy,atol=1e-10)
+    np.testing.assert_allclose(b[0].vector@b[1].vector,0.,atol=1e-8)
+
+
+def test_legacy_double_zeta_energy_is_reproducible():
+    from pyscf import gto, scf
+    from nondiagonal_ept import EPT
+    mf=scf.RHF(gto.M(atom='F 0 0 0; H 0 0 .9168', basis='cc-pvdz',
+                    verbose=0)).run(conv_tol=1e-12)
+    old=EPT(mf,'nD-NRL3',frozen=1,static_space='full')
+    poles=old.kernel([4,2])
+    np.testing.assert_allclose([p.binding_energy_ev for p in poles],
+                               [15.215614620989829,19.340366060422543],atol=1e-7,rtol=0)

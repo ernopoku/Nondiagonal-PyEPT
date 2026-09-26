@@ -5,7 +5,7 @@ title: "Nondiagonal PyEPT: Reference Implementation of Non-diagonal Electron Pro
 authors:
   - family-names: "Opoku"
     given-names: "Ernest"
-version: "0.1.0"
+version: "0.2.0"
 license: MIT
 repository-code: "https://github.com/ernopoku/Nondiagonal-PyEPT"
 url: "https://github.com/ernopoku/Nondiagonal-PyEPT"

@@ -1,5 +1,7 @@
 # Basis-set sensitivity of the static nD-NRL3 extension
 
+**Historical report:** these measurements concern `full-space-v1`. The default is now the sector-projected version 2; see the [current method guide](NON_DYSON_NRL3.md) and [new validation](NON_DYSON_SECTOR_VALIDATION.md).
+
 This investigation reproduces the reported discrepancy for HF at F (0,0,0), H (0,0,0.9168) Angstrom, RHF, one frozen occupied orbital, IP targets 4 and 2 (zero-based original MO indices). All calculations use the same reference for both methods. The source is commit `3696fc2`. RHF tolerance is 1e-12, pole tolerance 1e-10, and static tolerance 1e-11, tighter than the standard input.
 
 ## Reproduced results

@@ -8,8 +8,10 @@ import numpy as np
 
 class EPT:
     def __init__(self,mf,method='NRL3',*,frozen=0,sector='ip',spin=0,max_memory_mb=2000,brueckner_tol=1e-8,
-                 static_tol=1e-10,static_max_cycle=None):
+                 static_tol=1e-10,static_max_cycle=None,static_space="sector"):
         spec=method_spec(method,sector)
+        if spec.name != 'nD-NRL3' and static_space != 'sector':
+            raise ValueError('static_space is only supported for nD-NRL3.')
         if static_max_cycle is None:
             static_max_cycle = 5000 if spec.name == 'nD-NRL3' else 500
         if spec.name.upper()=='BD-T1':
@@ -23,7 +25,8 @@ class EPT:
             self.hamiltonian=StaticNRL3(self.integrals,sector,spin,
                                            static_tol=static_tol,
                                            static_max_cycle=static_max_cycle,
-                                           max_memory_mb=max_memory_mb, _log=logger.new_logger(mf))
+                                           max_memory_mb=max_memory_mb, static_space=static_space,
+                                           _log=logger.new_logger(mf))
         else:
             self.integrals=from_pyscf(mf,frozen,max_memory_mb)
             self.hamiltonian=Hamiltonian(self.integrals,method,sector,spin,
@@ -35,7 +38,8 @@ class EPT:
         """Primary poles for zero-based ORIGINAL spatial MO indices.
 
         Default: active occupied orbitals for IP, active virtual orbitals for EA.
-        nD-NRL3 retains only the sector-specific triple manifold dynamically.
+        nD-NRL3 defaults to sector-specific simple and triple spaces; use
+        static_space="full" explicitly for the legacy full simple space.
         """
         h=self.hamiltonian
         original=self.integrals.original_mos[self.integrals.spatial[h.simple]]
@@ -46,7 +50,7 @@ class EPT:
         results=[]
         for target in targets:
             found=np.flatnonzero(original==target)
-            if not len(found):raise ValueError(f'MO {target} is frozen or invalid.')
+            if not len(found):raise ValueError(f"MO {target} is frozen, invalid, or outside this method's {h.sector.upper()} simple space.")
             omega,x,res,it=davidson(h,int(found[0]),tol,max_cycle,max_space)
             if any(abs(p.vector@x)>1-1e-7 for p in results):
                 raise ConvergenceError('Two targets converged to the same pole; use dense_spectrum to resolve strongly mixed states.')

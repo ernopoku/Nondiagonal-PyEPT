@@ -7,16 +7,17 @@
     "sector": "ip",
     "target": 4,
     "dyson_ev": 15.248450585586777,
-    "non_dyson_ev": 15.215614620989829,
-    "difference_ev": -0.032835964596948486,
+    "non_dyson_ev": 15.204731259214828,
+    "difference_ev": -0.04371932637194931,
     "dyson_PS": 0.9370924117376287,
-    "non_dyson_PS": 0.94601572817918,
-    "residual": 2.3462580063009956e-10,
+    "non_dyson_PS": 0.9451194086830297,
+    "residual": 9.170404064187713e-10,
     "dimensions": {
       "NRL3": 1474,
-      "nD-NRL3": 326
+      "nD-NRL3": 312
     },
-    "static_solve_residual": 9.443447785017654e-11
+    "formulation": "sector-projected-v2",
+    "static_solve_residual": 4.363668136536452e-13
   },
   {
     "molecule": "HF",
@@ -26,16 +27,17 @@
     "sector": "ip",
     "target": 2,
     "dyson_ev": 19.350582731642398,
-    "non_dyson_ev": 19.340366060422355,
-    "difference_ev": -0.010216671220042883,
+    "non_dyson_ev": 19.317820522337634,
+    "difference_ev": -0.0327622093047637,
     "dyson_PS": 0.9458022438774613,
-    "non_dyson_PS": 0.9582580127233211,
-    "residual": 4.374829743257639e-10,
+    "non_dyson_PS": 0.9572808099256633,
+    "residual": 2.2065956067285507e-10,
     "dimensions": {
       "NRL3": 1474,
-      "nD-NRL3": 326
+      "nD-NRL3": 312
     },
-    "static_solve_residual": 9.443447785017654e-11
+    "formulation": "sector-projected-v2",
+    "static_solve_residual": 4.363668136536452e-13
   },
   {
     "molecule": "HF",
@@ -45,16 +47,17 @@
     "sector": "ea",
     "target": 5,
     "dyson_ev": -4.696949123359977,
-    "non_dyson_ev": -4.809329766916114,
-    "difference_ev": -0.1123806435561363,
+    "non_dyson_ev": -4.692852500336615,
+    "difference_ev": 0.0040966230233623335,
     "dyson_PS": 0.9867874369537705,
-    "non_dyson_PS": 0.9905452487811119,
-    "residual": 2.5876832314562496e-10,
+    "non_dyson_PS": 0.9908178968045956,
+    "residual": 2.9716014440922653e-10,
     "dimensions": {
       "NRL3": 1474,
-      "nD-NRL3": 1166
+      "nD-NRL3": 1162
     },
-    "static_solve_residual": 4.28343422576891e-11
+    "formulation": "sector-projected-v2",
+    "static_solve_residual": 5.710488065286607e-12
   },
   {
     "molecule": "H2O",
@@ -64,16 +67,17 @@
     "sector": "ip",
     "target": 4,
     "dyson_ev": 11.937720624492536,
-    "non_dyson_ev": 11.921914849478684,
-    "difference_ev": -0.015805775013852497,
+    "non_dyson_ev": 11.895866045654975,
+    "difference_ev": -0.04185457883756172,
     "dyson_PS": 0.9307086477653457,
-    "non_dyson_PS": 0.942533294008502,
-    "residual": 2.65826640351643e-10,
+    "non_dyson_PS": 0.940801246430464,
+    "residual": 1.8551179620645882e-10,
     "dimensions": {
       "NRL3": 2569,
-      "nD-NRL3": 441
+      "nD-NRL3": 422
     },
-    "static_solve_residual": 4.397824471747828e-11
+    "formulation": "sector-projected-v2",
+    "static_solve_residual": 2.0851036203238024e-13
   },
   {
     "molecule": "H2O",
@@ -83,16 +87,17 @@
     "sector": "ip",
     "target": 3,
     "dyson_ev": 13.85974105580853,
-    "non_dyson_ev": 13.92186491718073,
-    "difference_ev": 0.06212386137219994,
+    "non_dyson_ev": 13.823048805754894,
+    "difference_ev": -0.036692250053636855,
     "dyson_PS": 0.9323798982070723,
-    "non_dyson_PS": 0.9442528205422505,
-    "residual": 2.8984301225483595e-10,
+    "non_dyson_PS": 0.9435148870469859,
+    "residual": 2.3813549832411794e-10,
     "dimensions": {
       "NRL3": 2569,
-      "nD-NRL3": 441
+      "nD-NRL3": 422
     },
-    "static_solve_residual": 4.397824471747828e-11
+    "formulation": "sector-projected-v2",
+    "static_solve_residual": 2.0851036203238024e-13
   },
   {
     "molecule": "H2O",
@@ -102,16 +107,17 @@
     "sector": "ea",
     "target": 5,
     "dyson_ev": -4.814259960257668,
-    "non_dyson_ev": -4.810544698232623,
-    "difference_ev": 0.0037152620250449075,
+    "non_dyson_ev": -4.810033563388199,
+    "difference_ev": 0.004226396869468907,
     "dyson_PS": 0.9809478171448108,
-    "non_dyson_PS": 0.9843647375664775,
-    "residual": 7.646885999971987e-10,
+    "non_dyson_PS": 0.9843612430727585,
+    "residual": 5.924534225584876e-10,
     "dimensions": {
       "NRL3": 2569,
-      "nD-NRL3": 2151
+      "nD-NRL3": 2147
     },
-    "static_solve_residual": 1.0090740865101396e-11
+    "formulation": "sector-projected-v2",
+    "static_solve_residual": 4.329456254449147e-11
   },
   {
     "molecule": "N2",
@@ -121,16 +127,17 @@
     "sector": "ip",
     "target": 6,
     "dyson_ev": 16.63665561966898,
-    "non_dyson_ev": 16.77879916784181,
-    "difference_ev": 0.14214354817283237,
+    "non_dyson_ev": 16.63783659756884,
+    "difference_ev": 0.0011809778998603804,
     "dyson_PS": 0.9258679997715329,
-    "non_dyson_PS": 0.9558884953792303,
-    "residual": 6.394087537614776e-10,
+    "non_dyson_PS": 0.9566640971261988,
+    "residual": 4.686737184648259e-10,
     "dimensions": {
       "NRL3": 4016,
-      "nD-NRL3": 761
+      "nD-NRL3": 740
     },
-    "static_solve_residual": 8.460416790727687e-11
+    "formulation": "sector-projected-v2",
+    "static_solve_residual": 1.09832736120356e-12
   },
   {
     "molecule": "N2",
@@ -140,16 +147,17 @@
     "sector": "ip",
     "target": 4,
     "dyson_ev": 15.0868702944469,
-    "non_dyson_ev": 15.048719512627004,
-    "difference_ev": -0.03815078181989584,
+    "non_dyson_ev": 15.037275032410403,
+    "difference_ev": -0.049595262036497445,
     "dyson_PS": 0.8995396917581046,
-    "non_dyson_PS": 0.9133929238776213,
-    "residual": 4.712291077934153e-10,
+    "non_dyson_PS": 0.9124409100123023,
+    "residual": 4.452918383361652e-10,
     "dimensions": {
       "NRL3": 4016,
-      "nD-NRL3": 761
+      "nD-NRL3": 740
     },
-    "static_solve_residual": 8.460416790727687e-11
+    "formulation": "sector-projected-v2",
+    "static_solve_residual": 1.09832736120356e-12
   },
   {
     "molecule": "N2",
@@ -159,16 +167,17 @@
     "sector": "ip",
     "target": 3,
     "dyson_ev": 18.33578681776494,
-    "non_dyson_ev": 18.30793524343934,
-    "difference_ev": -0.027851574325602257,
+    "non_dyson_ev": 18.259999868211647,
+    "difference_ev": -0.07578694955329368,
     "dyson_PS": 0.8053237616665672,
-    "non_dyson_PS": 0.8164398198209561,
-    "residual": 7.493322243731839e-11,
+    "non_dyson_PS": 0.8166253076525525,
+    "residual": 8.570444451763297e-10,
     "dimensions": {
       "NRL3": 4016,
-      "nD-NRL3": 761
+      "nD-NRL3": 740
     },
-    "static_solve_residual": 8.460416790727687e-11
+    "formulation": "sector-projected-v2",
+    "static_solve_residual": 1.09832736120356e-12
   },
   {
     "molecule": "N2",
@@ -178,15 +187,16 @@
     "sector": "ea",
     "target": 7,
     "dyson_ev": -3.9048569722943762,
-    "non_dyson_ev": -3.877443685596203,
-    "difference_ev": 0.027413286698173334,
+    "non_dyson_ev": -3.8774436855961922,
+    "difference_ev": 0.027413286698183992,
     "dyson_PS": 0.9275202178846498,
-    "non_dyson_PS": 0.9549294432156399,
-    "residual": 8.584615578180737e-10,
+    "non_dyson_PS": 0.9549294432156394,
+    "residual": 8.584615982766424e-10,
     "dimensions": {
       "NRL3": 4016,
-      "nD-NRL3": 3281
+      "nD-NRL3": 3276
     },
-    "static_solve_residual": 1.7129616626092448e-11
+    "formulation": "sector-projected-v2",
+    "static_solve_residual": 4.746294163037763e-11
   }
 ]

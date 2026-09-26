@@ -90,7 +90,7 @@ Some BLAS builds run small tensor contractions faster with one thread. The recor
 
 ## Static nD-NRL3 extension
 
-See [the dedicated validation and definition](NON_DYSON_NRL3.md) and [ten IP/EA comparisons](non_dyson_comparison.json). This extension has independent dense-resolvent and weak-coupling checks but no external nD-NRL3 benchmark implementation. That extension added its own algebra and molecular checks.
+The default is now sector-projected version 2. See [its definition and migration notes](NON_DYSON_NRL3.md), [cross-basis validation](NON_DYSON_SECTOR_VALIDATION.md), and [ten current IP/EA comparisons](non_dyson_comparison.json). The full-space version 1 had a demonstrated triple-zeta sampling problem; its historical results are kept separately. Independent matrix and weak-coupling checks validate the implementation, but there is no external benchmark implementation of this project-defined NRL3 extension. Agreement with NRL3 is not a claim of exact or experimental accuracy.
 
 
 ## Separate-sector additions

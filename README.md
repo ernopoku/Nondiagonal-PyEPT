@@ -18,7 +18,7 @@ The core uses a **matrix-free Hermitian Hamiltonian**, explicit antisymmetric sp
 | `NR2` | Non-diagonal renormalized second order |
 | `NRP3` | Non-diagonal renormalized partial third order |
 | `NRQ3` | Non-diagonal renormalized quasiparticle third order |
-| `nD-NRL3` | Static opposite-sector extension of NRL3; [definition and validation](docs/NON_DYSON_NRL3.md) |
+| `nD-NRL3` | Sector-projected static extension of NRL3 (version 2); [definition and validation](docs/NON_DYSON_NRL3.md) |
 | `NRL3` | Non-diagonal renormalized linear third order |
 | `ADC(3)` | Conventional Dyson ADC(3) with Schirmer–Angonoa DEM static self-energy |
 | `3+`| Third-order plus |
@@ -152,10 +152,9 @@ Printed examples label pole strength as **PS**. The Python attribute `pole.stren
 
 ## Static non-Dyson NRL3
 
-**Known limitation:** the current static extension can differ substantially from NRL3 in triple-zeta bases (up to 2.78 eV in the tested HF IPs). See the [basis-set investigation](docs/NON_DYSON_BASIS_AUDIT.md); converged solver residuals do not establish the accuracy of this approximation.
+`EPT(mf, "nD-NRL3", frozen=1, sector="ip")` now defaults to **sector-projected-v2**: occupied simple orbitals plus 2hp configurations for IP, virtual simple orbitals plus 2ph configurations for EA. This removes the wrong-sector static sampling responsible for the previous triple-zeta discrepancy. Existing scripts use the revised construction automatically; use `static_space="full"` only to reproduce the original approximation.
 
-Use `EPT(mf, "nD-NRL3", frozen=1, sector="ip")` or include `"nD-NRL3"` in `run_methods`. For IP, 2ph contributions are frozen at HF orbital energies and symmetrized; for EA, 2hp contributions are frozen instead. See [equations, PS interpretation, examples, and validation limits](docs/NON_DYSON_NRL3.md). The static setup now uses preconditioned, spin-blocked contractions with reusable integral layouts; [timings and controls](docs/NON_DYSON_PERFORMANCE.md) explain the improvement and its limits.
-
+See the [equations, migration notes, PS interpretation, and controls](docs/NON_DYSON_NRL3.md), [basis-set validation](docs/NON_DYSON_SECTOR_VALIDATION.md), and [legacy discrepancy investigation](docs/NON_DYSON_BASIS_AUDIT.md). This is a project-defined static NRL3 extension, not the separately derived ADC ISR. Comparisons to NRL3 are not a guarantee of accuracy for arbitrary systems.
 
 ## Separate IP/EA intermediate-state representations
 

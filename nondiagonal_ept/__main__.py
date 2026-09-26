@@ -11,14 +11,14 @@ def main():
     args=parser.parse_args();config=json.loads(args.input.read_text())
     allowed={'atom','basis','charge','unit','method','frozen','sector','targets','spin',
              'scf_tol','tol','max_cycle','max_space','max_memory_mb','brueckner_tol',
-             'static_tol','static_max_cycle'}
+             'static_tol','static_max_cycle','static_space'}
     unknown=set(config)-allowed
     if unknown:parser.error(f'Unknown input fields: {sorted(unknown)}')
     mol=gto.M(atom=config['atom'],basis=config.get('basis','cc-pvdz'),
               charge=config.get('charge',0),unit=config.get('unit','Angstrom'),spin=0,verbose=0)
     mf=scf.RHF(mol).run(conv_tol=config.get('scf_tol',1e-12))
     options={k:config[k] for k in ('frozen','sector','spin','max_memory_mb','brueckner_tol',
-                                 'static_tol','static_max_cycle') if k in config}
+                                 'static_tol','static_max_cycle','static_space') if k in config}
     ep=EPT(mf,config.get('method','NRL3'),**options)
     solver={k:config[k] for k in ('tol','max_cycle','max_space') if k in config}
     poles=ep.kernel(config.get('targets'),**solver)
