@@ -1,5 +1,7 @@
 # Static non-Dyson NRL3
 
+**Known basis-set limitation:** HF IP benchmarks show differences from NRL3 up to 0.60 eV with cc-pVTZ and 2.78 eV with aug-cc-pVTZ, despite converged residuals. The occupied–virtual static sampling is implicated. Double-zeta agreement does not establish general reliability. See the [basis-set investigation](https://github.com/ernopoku/Nondiagonal-PyEPT/blob/main/docs/NON_DYSON_BASIS_AUDIT.md) before using this exploratory approximation for quantitative predictions.
+
 The method name is **`nD-NRL3`**. This project-defined extension freezes the opposite-sector NRL3 self-energy at HF orbital energies and symmetrizes its off-diagonal elements. It is distinct from a separately derived non-Dyson ADC intermediate-state formulation.
 
 ## Update your installation

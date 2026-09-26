@@ -1,0 +1,174 @@
+[
+  {
+    "basis": "cc-pvdz",
+    "ns": 18,
+    "static_max_residual": 3.983018678563407e-12,
+    "K_block_norms": {
+      "oo": 0.10604791653675961,
+      "ov": 0.13035176328263148,
+      "vv": 0.3940989705600628
+    },
+    "poles": [
+      {
+        "target": 4,
+        "NRL3_eV": 15.248450585586765,
+        "nD_NRL3_eV": 15.215614620989806,
+        "NRL3_PS": 0.9370924117376157,
+        "nD_PS": 0.946015728177346,
+        "dyson_overlap_squared": 0.999914670082043,
+        "nd_residual": 3.333810065569919e-11,
+        "static_minus_dynamic_expectation_eV": 0.028632272027082413,
+        "static_minus_dynamic_action_norm": 0.01860905810670188,
+        "virtual_simple_weight": 0.0002064153216199229
+      },
+      {
+        "target": 2,
+        "NRL3_eV": 19.35058273164252,
+        "nD_NRL3_eV": 19.3403660604227,
+        "NRL3_PS": 0.9458022438510003,
+        "nD_PS": 0.9582580127287701,
+        "dyson_overlap_squared": 0.9999060039105746,
+        "nd_residual": 9.928457278534519e-11,
+        "static_minus_dynamic_expectation_eV": 0.004468642513947043,
+        "static_minus_dynamic_action_norm": 0.023781289274229494,
+        "virtual_simple_weight": 0.0005037762643475771
+      }
+    ],
+    "diagnostic_only_occupied_sampled_ov_eV": [
+      15.230575227177946,
+      19.33911556410513
+    ],
+    "max_abs_K_ov": 0.06371820644827127,
+    "max_abs_occupied_sampled_ov": 0.030817452399179695,
+    "seconds": 0.4239025409333408
+  },
+  {
+    "basis": "aug-cc-pvdz",
+    "ns": 31,
+    "static_max_residual": 9.00332951062765e-12,
+    "K_block_norms": {
+      "oo": 0.1156861157450793,
+      "ov": 0.14746249615052734,
+      "vv": 0.8101870474337126
+    },
+    "poles": [
+      {
+        "target": 4,
+        "NRL3_eV": 15.96486229014277,
+        "nD_NRL3_eV": 15.926211314540799,
+        "NRL3_PS": 0.9249263974641342,
+        "nD_PS": 0.9357310893995487,
+        "dyson_overlap_squared": 0.9997847803213804,
+        "nd_residual": 2.000694082236784e-11,
+        "static_minus_dynamic_expectation_eV": 0.02639840695000026,
+        "static_minus_dynamic_action_norm": 0.03414092229521583,
+        "virtual_simple_weight": 0.0008146346494423697
+      },
+      {
+        "target": 2,
+        "NRL3_eV": 19.97567584869681,
+        "nD_NRL3_eV": 20.017022440341847,
+        "NRL3_PS": 0.9313052801445354,
+        "nD_PS": 0.9450195821888303,
+        "dyson_overlap_squared": 0.9988483170186049,
+        "nd_residual": 6.820614961379392e-11,
+        "static_minus_dynamic_expectation_eV": -0.11888087528424196,
+        "static_minus_dynamic_action_norm": 0.0935071312369188,
+        "virtual_simple_weight": 0.0012327973314837193
+      }
+    ],
+    "diagnostic_only_occupied_sampled_ov_eV": [
+      15.94522629611991,
+      19.96309205208807
+    ],
+    "max_abs_K_ov": 0.06360097809185976,
+    "max_abs_occupied_sampled_ov": 0.03295449260146728,
+    "seconds": 2.4040892920456827
+  },
+  {
+    "basis": "cc-pvtz",
+    "ns": 43,
+    "static_max_residual": 7.734186782343888e-12,
+    "K_block_norms": {
+      "oo": 0.1395277834403667,
+      "ov": 0.5044045779673887,
+      "vv": 3.349978449056517
+    },
+    "poles": [
+      {
+        "target": 4,
+        "NRL3_eV": 15.822577714947158,
+        "nD_NRL3_eV": 16.424595888640763,
+        "NRL3_PS": 0.9270633850932917,
+        "nD_PS": 0.939392615560504,
+        "dyson_overlap_squared": 0.9802428679756332,
+        "nd_residual": 9.602296904364318e-11,
+        "static_minus_dynamic_expectation_eV": -2.128964492476842,
+        "static_minus_dynamic_action_norm": 0.42863362764462476,
+        "virtual_simple_weight": 0.021152111895239734
+      },
+      {
+        "target": 2,
+        "NRL3_eV": 19.76761767556867,
+        "nD_NRL3_eV": 20.217893473558867,
+        "NRL3_PS": 0.9345956502284147,
+        "nD_PS": 0.9471438416498247,
+        "dyson_overlap_squared": 0.9965243041637141,
+        "nd_residual": 3.108749495544879e-11,
+        "static_minus_dynamic_expectation_eV": -0.9303479747804301,
+        "static_minus_dynamic_action_norm": 0.3216230075868016,
+        "virtual_simple_weight": 0.004069803247875924
+      }
+    ],
+    "diagnostic_only_occupied_sampled_ov_eV": [
+      15.805283933413065,
+      19.756331722164738
+    ],
+    "max_abs_K_ov": 0.32059447485142173,
+    "max_abs_occupied_sampled_ov": 0.0298633876213492,
+    "seconds": 9.470190125051886
+  },
+  {
+    "basis": "aug-cc-pvtz",
+    "ns": 68,
+    "static_max_residual": 9.914363858981243e-12,
+    "K_block_norms": {
+      "oo": 0.14293763719954855,
+      "ov": 1.1641950923060542,
+      "vv": 7.495339942408035
+    },
+    "poles": [
+      {
+        "target": 4,
+        "NRL3_eV": 16.07078151330808,
+        "nD_NRL3_eV": 16.341132619365304,
+        "NRL3_PS": 0.9219422018741289,
+        "nD_PS": 0.9328430485531415,
+        "dyson_overlap_squared": 0.9936956839954464,
+        "nd_residual": 3.955144635940745e-11,
+        "static_minus_dynamic_expectation_eV": -0.5899276628690688,
+        "static_minus_dynamic_action_norm": 0.20175016953604746,
+        "virtual_simple_weight": 0.005698793594046569
+      },
+      {
+        "target": 2,
+        "NRL3_eV": 19.993541742523682,
+        "nD_NRL3_eV": 22.77682760577855,
+        "NRL3_PS": 0.9285263115332008,
+        "nD_PS": 0.9452559301636518,
+        "dyson_overlap_squared": 0.6662995389741823,
+        "nd_residual": 7.916218436080234e-12,
+        "static_minus_dynamic_expectation_eV": -12.074092147189152,
+        "static_minus_dynamic_action_norm": 1.1368510141844073,
+        "virtual_simple_weight": 0.2041713147745918
+      }
+    ],
+    "diagnostic_only_occupied_sampled_ov_eV": [
+      16.051422560637025,
+      19.975515953052213
+    ],
+    "max_abs_K_ov": 1.021164175284108,
+    "max_abs_occupied_sampled_ov": 0.02901119317748316,
+    "seconds": 192.267551332945
+  }
+]

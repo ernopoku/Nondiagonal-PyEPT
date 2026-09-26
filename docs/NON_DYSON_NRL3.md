@@ -1,5 +1,7 @@
 # Static non-Dyson extension of NRL3
 
+**Known basis-set limitation:** HF IP benchmarks show differences from NRL3 up to 0.60 eV with cc-pVTZ and 2.78 eV with aug-cc-pVTZ, despite converged residuals. The occupied–virtual static sampling is implicated. Double-zeta agreement does not establish general reliability. See the [basis-set investigation](NON_DYSON_BASIS_AUDIT.md) before using this exploratory approximation for quantitative predictions.
+
 Invoke this implementation as **`nD-NRL3`**. It is the static opposite-sector
 extension selected for this project. It is not a separately derived IP/EA ADC
 intermediate-state representation, and it is not a new published benchmarked
